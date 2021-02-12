@@ -1,6 +1,6 @@
 const {Router} = require('express');
-const service  = require('./production-service')
-const productModel = require('../models/production.model')
+const service  = require('../production/production-service')
+
 const router = Router()
 
 // 상품 list 조회 API
@@ -23,12 +23,15 @@ router.get('/list', async(req, res) => {
 
 // 상품 Detail 조회 API
 router.get('/:id', async(req, res) => {
-  const { id } = req.query
+  const { id } = req.params
   if(!id){
     res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
   }
   try{
     const productId = await service.productionFindById(id)
+    if(!productId){
+      res.status(400).json({message: "해당 상품이 없습니다."})
+    }
     res.status(200).json({productId})
 
   } catch(e){
@@ -74,8 +77,21 @@ router.post('/:id', async(req, res) => {
   }
 })
 
-router.get('/:id/reivew', (req, res) => {
-
+// 상품 상세 옵션 조회 API
+router.get('/:id/option', async(req, res) => {
+  const { id } = req.params
+  if(!id){
+    res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
+  }
+  try{
+    const production_options = await service.productionOptionById(id)
+    if(!production_options){
+      res.status(400).json({message: "해당 상품의 옵션이 없습니다."})
+    }
+    res.status(200).json({production_options})
+  } catch(e){
+    res.status(400).json({e})
+  }
 })
 
 

@@ -1,6 +1,6 @@
 const {Router} = require('express');
 
-const service = require('./user-service')
+const service = require('../service/service')
 const {getSalt, getExpiredTime, getHash} =require('../lilb/hash')
 
 const router = Router()
@@ -21,7 +21,7 @@ router.get('/', async(req, res) => {
 })
 
 // 유저 생성 API
-router.post('/', async(req, res) => {
+router.post('/new', async(req, res) => {
   const { email, pw, nickname, profile } = req.body
 
   if(!email){
