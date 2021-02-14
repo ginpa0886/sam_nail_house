@@ -1,9 +1,14 @@
 const db = require('../../../helper/db')
 
 const User = 'user'
+const Brand = 'brand'
+const Category = 'category'
 const Production = 'production_detail'
 const Option = 'production_option'
 const Review = 'review'
+const Question = 'quetion'
+const Cart = 'cart'
+const Order = 'order'
 
 // 유저 목록 조회 
 const userList = (page, pageSize) => {
@@ -78,8 +83,9 @@ const productionList = (page, pageSize) => {
   }
 
   return db(Production)
-      .innerJoin()
-      .select('b0rand_id', 'category_id', 'name', 'price', 'sale', 'point', 'type', 'free', 'fee', 'return_fee', 'exchange_fee', 'spcial_fee', 'inaccessble', 'return_address', 'creadtedAt')
+      .select('*')
+      .innerJoin(Brand, 'production_brand_id', 'brand_id')
+      .innerJoin(Category, 'production_category_id', 'category_id')
       .limit(pageSize)
       .offset((page - 1) * pageSize)
 }
@@ -93,7 +99,21 @@ const productionFindById = (id) => {
 
   return db(Production)
       .select('*')
-      .where('production_id', productionTypeNumberId)
+      .where('production_id' ,productionTypeNumberId)
+      .then(([item]) => item)
+}
+
+const brandByProductionId = (brandId) => {
+  return db(Brand)
+      .select('*')
+      .where('brand_id', brandId)
+      .then(([item]) => item)
+}
+
+const categoryByProductionId = (categoryId) => {
+  return db(Category)
+      .select('*')
+      .where('category_id', categoryId)
       .then(([item]) => item)
 }
 
@@ -123,22 +143,134 @@ const productionPost = (productionDetail) => {
 // --------------------------------------------
 
 
-// 리뷰 ID 조회
+// 리뷰 리스트 조회
+const reviewList = (page, pageSize) => {
+  if(isNaN(page)){
+    return Promise.reject('page의 값이 숫자가 아닙니다.')
+  }
+  if(isNaN(pageSize)){
+    return Promise.reject('pagesize의 값이 숫자가 아닙니다.')
+  }
+
+  return db(Review)
+    .select('*')
+    .limit(pageSize)
+    .offset((page - 1) * pageSize)
+}
+
+// 리뷰 ID 상세조회
 const reviewFindById = (id) => {
   const typeId = +id;
   return db(Review)
       .select('*')
       .where('review_id', typeId)
+      .then(([item]) => item)
 }
 
-const foreignKeyFindByProductionId = () => {
-
-  return db(`${id}`)
-}
-
-const reviewCreate = (id) => {
+// 리뷰 등록
+const reviewCreate = (reviewData) => {
   return db(Review)
-    .insert()
+    .insert(reviewData)
+}
+
+// --------------------------------
+
+// 문의 목록 조회 
+const questionList = (page, pageSize) => {
+  if(isNaN(page)){
+    return Promise.reject('page의 값이 숫자가 아닙니다.')
+  }
+  if(isNaN(pageSize)){
+    return Promise.reject('pagesize의 값이 숫자가 아닙니다.')
+  }
+
+  return db(Question)
+      .select('*')
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+}
+
+// 문의 ID 상세조회
+const questionFindById = (id) => {
+  const typeId = +id;
+  return db(Question)
+      .select('*')
+      .where('question_id', typeId)
+      .then(([item]) => item)
+}
+
+// 리뷰 등록
+const questionCreate = (reviewData) => {
+  return db(Review)
+    .insert(reviewData)
+}
+
+// --------------------------------------
+
+// 바로구매 List 조회
+const orderList = (page, pageSize) => {
+  if(isNaN(page)){
+    return Promise.reject('page의 값이 숫자가 아닙니다.')
+  }
+  if(isNaN(pageSize)){
+    return Promise.reject('pagesize의 값이 숫자가 아닙니다.')
+  }
+
+  return db(Order)
+      .select('*')
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+}
+
+
+// 바로구매 상세 조회
+const orderFindById = (id) => {
+  const typeId = +id
+
+  return db(Order)
+      .select('*')
+      .where('order_id', typeId)
+      .then(([item]) => item)
+}
+
+// 바로구매 등록
+const orderCreate = (cartDetail) => {
+  return db(Order)
+      .insert(cartDetail)
+}
+
+// -----------------------------------
+
+// 장바구니 List 조회
+
+const cartList = (page, pageSize) => {
+  if(isNaN(page)){
+    return Promise.reject('page의 값이 숫자가 아닙니다.')
+  }
+  if(isNaN(pageSize)){
+    return Promise.reject('pagesize의 값이 숫자가 아닙니다.')
+  }
+
+  return db(Cart)
+      .select('*')
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+}
+
+// 장바구니 상세 조회
+const cartFindById = (id) => {
+  const typeId = +id
+
+  return db(Cart)
+      .select('*')
+      .where('cart_id', typeId)
+      .then(([item]) => item)
+}
+
+// 장바구니 등록
+const cartCreate = (cartDetail) => {
+  return db(Cart)
+      .insert(cartDetail)
 }
 
 module.exports = {
@@ -150,9 +282,21 @@ module.exports = {
   userDelete,
   productionList,
   productionFindById,
+  brandByProductionId,
+  categoryByProductionId,
   productionPost,
   productionOptionById,
+  reviewList,
   reviewFindById,
   reviewCreate,
-  foreignKeyFindByProductionId
+  questionList,
+  questionFindById,
+  questionCreate,
+  orderList,
+  orderFindById,
+  orderCreate,
+  cartList,
+  cartFindById,
+  cartCreate
+
 }
