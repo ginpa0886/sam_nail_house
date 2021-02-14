@@ -24,20 +24,72 @@ router.get('/list', async(req, res) => {
 // 상품 Detail 조회 API
 router.get('/:id', async(req, res) => {
   const { id } = req.params
-  if(!id){
+  if(!id || isNaN(id)){
     res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
+  }
+  
+  let foreginKey = {
+    brandId:{},
+    categoryId:{}
+  }
+  const productionDetail = {
+    production:{},
+    brand:{},
+    category:{},
+    option:{}
   }
 
   try{
-    productionById = await service.productionFindById(id)
+    const productionById = await service.productionFindById(id)
     if(!productionById){
       res.status(400).json({message: "해당 상품이 없습니다."})
     }
-    res.status(200).json({productionById})
+    
+    const { production_brand_id, production_category_id } = productionById
+
+    foreginKey = {
+      brandId: production_brand_id,
+      categoryId: production_category_id
+    }
+
+    productionDetail.production = productionById
   } catch(e){
     res.status(400).json({e})
   }
- 
+
+  try{
+    const { brandId } = foreginKey
+    const brandById = await service.brandByProductionId(brandId)
+    if(!brandById){
+      res.status(400).json({message: "해당 브랜드가 없습니다."})
+    }
+    productionDetail.brand = brandById
+  } catch(e){
+    res.status(400).json({e})
+  }
+
+  try{
+    const { categoryId } = foreginKey
+    const categoryById = await service.categoryByProductionId(categoryId)
+    if(!categoryById){
+      res.status(400).json({message: "해당 카테고리가 없습니다."})
+    }
+    productionDetail.category = categoryById
+  } catch(e){
+    res.status(400).json({e})
+  }
+
+  try{
+    const optionById = await service.optionByProductionId(id)
+    if(!optionById){
+      res.status(400).json({message: "해당 상품에 option이 없습니다"})
+    }
+    productionDetail.option = optionById
+  } catch(e){
+    res.status(400).json({e})
+  }
+
+  res.status(200).json({productionDetail})
 })
 
 // 상품 등록 API
@@ -133,22 +185,7 @@ router.post('/', async(req, res) => {
   }
 })
 
-// 상품 상세 옵션 조회 API
-router.get('/:id/option', async(req, res) => {
-  const { id } = req.params
-  if(!id){
-    res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
-  }
-  try{
-    const production_options = await service.productionOptionById(id)
-    if(!production_options){
-      res.status(400).json({message: "해당 상품의 옵션이 없습니다."})
-    }
-    res.status(200).json({production_options})
-  } catch(e){
-    res.status(400).json({e})
-  }
-})
+
 
 
 module.exports = router

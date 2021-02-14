@@ -26,15 +26,72 @@ router.get('/:id', async(req, res) => {
     res.status.json({message: "id 값이 없습니다."})
   }
 
+  let foreginKey = {
+    userId:{},
+    productionId:{},
+    optionId:{}
+  }
+
+  const questionDetail = {
+    question:{},
+    user:{},
+    production:{},
+    option:{}
+  }
+
   try{
     const questionById = await service.questionFindById(id)
     if(!questionById){
       res.status(400).json({message: "해당 문의는 존재하지 않습니다."})
     }
-    res.status(200).json({questionById})
+
+    const { user_question_id, production_question_id, option_question_id } = questionById
+
+    foreginKey = {
+      userId: user_question_id,
+      productionId: production_question_id,
+      optionId: option_question_id
+    }
+
+    questionDetail.question = questionById
   } catch(e){
     res.status(400).json({e})
   }
+
+  try{
+    const { userId } = foreginKey
+    const userById = await service.userFindById(userId)
+    if(!userById){
+      res.status(400).json({message: "리뷰 유저 정보가 없습니다."})
+    }
+    questionDetail.user = userById
+  } catch(e){
+    res.status(400).json({e})
+  }
+
+  try{
+    const { productionId } = foreginKey
+    const productionById = await service.productionFindById(productionId)
+    if(!productionById){
+      res.status(400).json({message: "리뷰 상품 정보가 없습니다."})
+    }
+    questionDetail.production = productionId
+  } catch(e){
+    res.status(400).json({e})
+  }
+
+  try{
+    const { optionId } = foreginKey
+    const optionById = await service.optionById(optionId)
+    if(!optionById){
+      res.status(400).json({message: "리뷰 상품 옵션 정보가 없습니다."})
+    }
+    questionDetail.option = optionById
+    res.status(200).json({questionDetail})
+  } catch(e){
+    res.status(400).json({e})
+  }
+  
 })
 
 // 문의 등록 API

@@ -6,7 +6,7 @@ const Category = 'category'
 const Production = 'production_detail'
 const Option = 'production_option'
 const Review = 'review'
-const Question = 'quetion'
+const Question = 'question'
 const Cart = 'cart'
 const Order = 'order'
 
@@ -35,7 +35,7 @@ const userCreate = user => {
 const userFindById = (id) => {
   return db(User)
       .select('*')
-      .where('production_id', id)
+      .where('user_id', id)
       .then(([item]) => item)
 }
 
@@ -50,7 +50,7 @@ const userFindByEmail = email => {
 // 유저 정보 수정
 const userUpdate = (userChange) => {
   return db(User)
-    .where('production_id', userChange.id)
+    .where('user_id', userChange.id)
     .update({
       email: userChange.email,
       salt: userChange.salt,
@@ -64,7 +64,7 @@ const userUpdate = (userChange) => {
 // 유저 삭제(비활성화)
 const userDelete = (id) => {
   return db(User)
-    .where('production_id', id)
+    .where('user_id', id)
     .update({
       updatedAt: new Date(),
       enabled: false
@@ -92,14 +92,11 @@ const productionList = (page, pageSize) => {
 
 // 상품_id 를 통한 상품 Detail
 const productionFindById = (id) => {
-  if(isNaN(id)){
-    return Promise.reject('id의 값이 숫자가 아닙니다.')
-  }
   const productionTypeNumberId = +id;
 
   return db(Production)
       .select('*')
-      .where('production_id' ,productionTypeNumberId)
+      .where('production_id', productionTypeNumberId)
       .then(([item]) => item)
 }
 
@@ -117,18 +114,18 @@ const categoryByProductionId = (categoryId) => {
       .then(([item]) => item)
 }
 
-// 상품의 option 조회
-const productionOptionById = (production_id) => {
-  if(isNaN(production_id)){
-    return Promise.reject('production_id 값이 숫자가 아닙니다.')
-  }
-  const productionTypeNumberId = +production_id;
-
-  return db(Production)
+const optionByProductionId = (id) => {
+  return db(Option)
       .select('*')
-      .innerJoin(Option, 'production_id', 'production_option_id')
-      .where('production_id', productionTypeNumberId)
+      .andWhere('production_option_id', id)
 }
+
+const optionById = (id) => {
+  return db(Option)
+    .select('*')
+    .andWhere('option_id', id)
+}
+
 
 //상품 등록 
 const productionPost = (productionDetail) => {
@@ -199,7 +196,8 @@ const questionFindById = (id) => {
       .then(([item]) => item)
 }
 
-// 리뷰 등록
+
+// 문의 등록
 const questionCreate = (reviewData) => {
   return db(Review)
     .insert(reviewData)
@@ -284,8 +282,9 @@ module.exports = {
   productionFindById,
   brandByProductionId,
   categoryByProductionId,
+  optionByProductionId,
+  optionById,
   productionPost,
-  productionOptionById,
   reviewList,
   reviewFindById,
   reviewCreate,
