@@ -25,13 +25,14 @@ router.get('/list', async(req, res) => {
 router.get('/:id', async(req, res) => {
   const { id } = req.params
   if(!id || isNaN(id)){
-    res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
+    return res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
   }
   
   let foreginKey = {
     brandId:{},
     categoryId:{}
   }
+  
   const productionDetail = {
     production:{},
     brand:{},
@@ -184,6 +185,8 @@ router.post('/', async(req, res) => {
     res.status(400).json(e)
   }
 })
+
+
 
 
 

@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
       }
     })
   } else{
-    
+    jwt.sign(token, config.secret, {expiresIn: '5m'})
     res.status(400).json({message: "No token"})
   }
 
