@@ -100,6 +100,7 @@ const productionFindById = (id) => {
       .then(([item]) => item)
 }
 
+// 특정 brand 조회
 const brandByProductionId = (brandId) => {
   return db(Brand)
       .select('*')
@@ -107,6 +108,7 @@ const brandByProductionId = (brandId) => {
       .then(([item]) => item)
 }
 
+// 특정 category 조회
 const categoryByProductionId = (categoryId) => {
   return db(Category)
       .select('*')
@@ -114,12 +116,15 @@ const categoryByProductionId = (categoryId) => {
       .then(([item]) => item)
 }
 
+
+// 특정 option 조회
 const optionByProductionId = (id) => {
   return db(Option)
       .select('*')
       .andWhere('production_option_id', id)
 }
 
+// option 조회 ( 단일 )
 const optionById = (id) => {
   return db(Option)
     .select('*')
@@ -162,6 +167,13 @@ const reviewFindById = (id) => {
       .select('*')
       .where('review_id', typeId)
       .then(([item]) => item)
+}
+
+// 리뷰 별점 조회
+const findStarById = (id) => {
+  return db(Review)
+      .select('rating')
+      .where('production_re_id', id)
 }
 
 // 리뷰 등록
@@ -271,6 +283,55 @@ const cartCreate = (cartDetail) => {
       .insert(cartDetail)
 }
 
+// ---------------------------------
+
+// 해당 상품 별점 조회
+const starCount = (stars) => {
+  const starForCount = {
+    count1:0,
+    count2:0,
+    count3:0,
+    count4:0,
+    count5:0,
+  }
+  
+  const userStarArray = stars
+  
+    for(let i = 0; i < stars.length; i++){
+      const userStar = userStarArray[i].rating
+      switch(userStar){
+        case 1:
+          starForCount.count1++;
+          break;
+        case 2:
+          starForCount.count2++;
+          break;
+        case 3:
+          starForCount.count3++;
+          break;
+        case 4:
+          starForCount.count4++;
+          break;
+        case 5:
+          starForCount.count5++;
+          break;
+        default:
+          starForCount.count3++;
+          break;
+      }
+    }
+    return starForCount
+}
+
+// 배송 정보 조회
+const findDeliveryInfo = (id) => {
+  return db(Production)
+      .select('type', 'free', 'fee', 'return_fee', 'exchange_fee', 'special_fee', 'delivery_to_capital', 'delivery_to_backwoods','delivery_to_jeju', 'return_address')
+      .where('production_id', id)
+      .then(([item]) => item)
+      
+}
+
 module.exports = {
   userList,
   userCreate,
@@ -287,6 +348,7 @@ module.exports = {
   productionPost,
   reviewList,
   reviewFindById,
+  findStarById,
   reviewCreate,
   questionList,
   questionFindById,
@@ -296,6 +358,7 @@ module.exports = {
   orderCreate,
   cartList,
   cartFindById,
-  cartCreate
-
+  cartCreate,
+  starCount,
+  findDeliveryInfo
 }

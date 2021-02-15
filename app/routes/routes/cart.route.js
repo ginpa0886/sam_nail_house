@@ -1,5 +1,5 @@
 const {Router} = require('express')
-const service = require('../service/service')
+const service = require('../service')
 const router = Router()
 
 // 장바구니 전체 조회 API
