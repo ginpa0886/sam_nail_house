@@ -22,7 +22,7 @@ router.use('/cart', cart)
 router.use('/order', order)
 router.use('/counts_for_star', starcount)
 router.use('/delivery', delivery)
-router.use('/test', test)
+// router.use('/test', test)
 
 
 module.exports = router

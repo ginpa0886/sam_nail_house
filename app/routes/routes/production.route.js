@@ -1,4 +1,5 @@
 const {Router} = require('express');
+
 const service  = require('../service')
 
 const router = Router()
@@ -19,6 +20,26 @@ router.get('/list', async(req, res) => {
   } catch(e){
     res.status(400).json({e})
   }
+})
+
+
+router.get('/option/:id', async(req, res) => {
+  const { id } = req.params
+  if(!id || isNaN(id)){
+    return res.status(400).json({message: "잘못된 정보를 입력하셨습니다."})
+  }
+
+  try{
+    const test = await service.testInnerjoin(id)
+    if(!test){
+      return res.status(400).json({message: " 에러에러"})
+    }
+    res.status(200).json({test})
+  } catch(e) {
+    res.status(400).json({e})
+  }
+
+
 })
 
 // 상품 Detail 조회 API

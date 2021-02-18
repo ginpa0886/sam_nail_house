@@ -1,7 +1,14 @@
 const {Router} = require('express');
 
+const jwt = require('jsonwebtoken');
+const secertKey = require('../config/auth.config')
+const bcrypt = require('bcryptjs')
+
 const service = require('../service')
-const {getSalt, getExpiredTime, getHash} =require('../lilb/hash')
+
+
+const {getSalt, getExpiredTime, getHash} =require('../lilb/hash');
+const { userList } = require('../service');
 
 const router = Router()
 
@@ -38,15 +45,14 @@ router.post('/new', async(req, res) => {
     const user = {
       email,
       salt,
-      pw: getHash(pw, salt),
+      // pw: getHash(pw, salt),
+      pw:bcrypt.hashSync(pw, 8),
       nickname,
       profile,
     }
 
     await service.userCreate(user)
-    res.status(200).json({ message:
-      "유저 등록이 완료되었습니다."
-    })
+    res.status(200).json({ message: "유저 등록이 완료되었습니다." })
   } catch(e){
     res.status(400).json({e})
   } 
@@ -66,26 +72,37 @@ router.post('/signin', async(req, res) => {
   try{
     const userByEmail = await service.userFindByEmail(email)
 
+
+    // 원래 pw 비교 구문
     if(userByEmail.pw !== getHash(pw, userByEmail.salt)){
       res.status(400).json({message: `"입력한 정보가 올바르지 않습니다.`})
     }
 
-    const token = getSalt()
+    // bcrypt를 사용하여 password를 비교하는 구문
+    // const passwordIsValid = bcrypt.compareSync(pw, userByEmail.pw)
+    // if(!passwordIsValid){
+    //   return res.status(401).json({message: "비밀번호가 다릅니다."})
+    // }
+    
+    // const token = getSalt()
     const expired = getExpiredTime()
-    connectStatus[userByEmail.id] = {
+    const token = jwt.sign({ email }, secertKey.secret, {expiresIn: expired})
+    
+    connectStatus[userByEmail.user_id] = {
       token, expired
     }
-
+   
     res.status(200).json({
-      token, expired
+      token, expired , connectStatus
     })
+    
   } catch(e){
     res.status(400).json({e})
   }
 })
 
 // 유저 로그인 확인 미들웨어
-router.use('/:id', (req, res) => {
+router.use('/:id', (req, res, next) => {
   const { id } = req.params
   if(!id || isNaN(id)){
     res.status(400).json({message: "id 정보가 옳바르지 않습니다."})
@@ -96,13 +113,19 @@ router.use('/:id', (req, res) => {
     return
   }
 
-  const token = req.header['_token_']
+  const token = req.headers['_token_']
   if (!token) {
     res.status(401).json({message: 'token 정보를 입력해주세요.'})
     return
   }
 
-  if(token !== connectStatus.token){
+  const decode = jwt.verify(token, secertKey.secret);
+  if(!decode){
+    res.status(400).json({message: "권한이 없어서 실행이 불가능 합니다."})
+    return
+  }
+  
+  if(token !== connection.token){
     res.status(401).json({message: 'token의 값이 올바르지 않습니다.'})
     return
   }

@@ -91,6 +91,15 @@ const productionList = (page, pageSize) => {
 }
 
 // 상품_id 를 통한 상품 Detail
+
+const testInnerjoin = (id) => {
+  return db(Production)
+      .select('*')
+      .innerJoin(Option, 'production_option_id', id)
+      
+}
+
+
 const productionFindById = (id) => {
   const productionTypeNumberId = +id;
 
@@ -360,5 +369,6 @@ module.exports = {
   cartFindById,
   cartCreate,
   starCount,
-  findDeliveryInfo
+  findDeliveryInfo,
+  testInnerjoin
 }
