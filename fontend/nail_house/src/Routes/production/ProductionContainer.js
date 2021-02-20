@@ -1,29 +1,27 @@
 import { testApi } from '../../api'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { withRouter } from 'react-router-dom'
-import ProductionDetail from './ProductionPresenter'
+import ProductionPresenter from './ProductionPresenter'
+import Dispage from '../../Components/Dispage'
+import { ProductionContext } from './context'
 
-const Test = ({ match: { params: { id } }}) => {
-  console.log(id);
-  const plzaxios = async() => {
-    try{
-      const {data: { productionDetail }} = await testApi.ProductionInfo(id)
-      // await fetch('http://localhost:3003/production/').then(res => res.json()).then(data => console.log(data))
-      // console.log(prodcutionDetail);
-      console.log(productionDetail);
-      
-    } catch(e){
-      console.log("에러가 뜨면 안되는데 에러가 떠요 짜증나게");
-    }
-  }
-  plzaxios();
+const ProductionContainer = ({ match: { params: { id } }}) => {
+  const { detail, setDetail, getProductionInfo } = useContext(ProductionContext)
+  const productionId = id
+  // console.log(detail);
+  
+
+  useEffect(() => {
+    getProductionInfo(productionId)   
+  })
+  
   
 
   return (
     <>
-      <ProductionDetail />
+      <ProductionPresenter />
     </>
   )
 }
 
-export default withRouter(Test)
+export default withRouter(ProductionContainer)

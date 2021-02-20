@@ -1,9 +1,12 @@
-import Test from './ProductionContainer'
+import ProductionContainer from './ProductionContainer'
+import ProdcutionContextProvider from './context'
 
 const Production = () => {
   return(
     <>
-      <Test />
+      <ProdcutionContextProvider>
+        <ProductionContainer />
+      </ProdcutionContextProvider> 
     </>
   )
 }

@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import '../Asset/icomoon/style.css'
 import { HeaderContext } from './context'
+import SearchInput from './SearchInput'
 
 
 const Headers = styled.header`
@@ -67,34 +68,7 @@ const SLink = styled(Link)`
 const SerachArea = styled.div`
 `;
 
-const SearchBox = styled.form`
-  position: relative;
-`;
 
-const Serach = styled.input`
-  border: 1px solid #E0E2E7;
-  border-radius: 4px;
-  color: #A2A5AF;
-  height: 40px;
-  padding: 8px 10px;
-  padding-left: 40px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  margin-right: 32px;
-`;
-
-const SerachIcon = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #858896;
-  font-size: 20px;
-  left: 10px;
-  top: 10px;
-`;
 
 const UserInfoArea = styled.div`
   display:flex;
@@ -201,10 +175,7 @@ const MainHeader = ({ location : { pathname }}) => {
                 <Navi currnet={pathname === '/interior'}><SLink to="/interior">인테리어시공</SLink></Navi>
               </List>
               <SerachArea>
-                <SearchBox>
-                  <SerachIcon className="icon-Search"></SerachIcon>
-                  <Serach placeholder={"스토어 검색"}/>
-                </SearchBox>
+                <SearchInput />
               </SerachArea>
               <UserInfoArea>
                 <UserItem className="icon-Bookmark"></UserItem>

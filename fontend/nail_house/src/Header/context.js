@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 
-export const HeaderContext = React.createContext();
+export const HeaderContext = React.createContext()
 
 const HeaderContextProvider = ({ children }) => {
   // 
@@ -25,6 +25,7 @@ const HeaderContextProvider = ({ children }) => {
       setWrite({...write, dropdown: "block"})
     }
   }
+
 
   return (
   <HeaderContext.Provider value={{click, write, changeDisplay}}>
