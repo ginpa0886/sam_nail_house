@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import '../Asset/icomoon/style.css'
 import { HeaderContext } from './context'
 import SearchInput from './SearchInput'
+import UserPlace from './UserPlace'
 
 
 const Headers = styled.header`
@@ -76,40 +77,7 @@ const UserInfoArea = styled.div`
   align-items: center;
 `;
 
-const UserItem = styled.div`
-  width: 32px;
-  height: 32px;
-  font-size: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #858896;
-  margin-right: 8px;
-  text-align: center;
 
-  &:hover{
-    background-color: #3DA8F5;
-    color: #FFFFFF;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-`;
-
-const UserIcon = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 32px;
-  background-image: url(${props => props.bgUser});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-
-  &:hover{
-    cursor: pointer;
-    border: 2px solid #3DA8F5;
-  }
-`;
 
 const Write = styled.div`
   position: relative;
@@ -178,10 +146,7 @@ const MainHeader = ({ location : { pathname }}) => {
                 <SearchInput />
               </SerachArea>
               <UserInfoArea>
-                <UserItem className="icon-Bookmark"></UserItem>
-                <UserItem className="icon-Bell"></UserItem>
-                <UserItem className="icon-Cart"></UserItem>
-                <UserIcon bgUser={require("../Asset/userIcon/userIcon.jpg").default}></UserIcon>
+                <UserPlace />
               </UserInfoArea>
               <Write onClick={() => changeDisplay(dropdown)}>
                 <Writedown>

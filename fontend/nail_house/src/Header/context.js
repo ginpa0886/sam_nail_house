@@ -26,9 +26,17 @@ const HeaderContextProvider = ({ children }) => {
     }
   }
 
+  // search input 관련 함수 - 나중에는 axios로 받아 올 수 있지 않을까해서 context에 넣어둠
+  const [currentlySearch, setCurrentlySearch] = useState({
+    list: [],
+    display: "false"
+  })
+    
+  
+
 
   return (
-  <HeaderContext.Provider value={{click, write, changeDisplay}}>
+  <HeaderContext.Provider value={{click, write, changeDisplay, currentlySearch, setCurrentlySearch}}>
     {children}
   </HeaderContext.Provider>
   );
