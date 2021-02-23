@@ -7,6 +7,7 @@ import Store from './Routes/Store'
 import Community from './Routes/Community'
 import Interior from './Routes/Interior'
 import Login from './Routes/Login'
+import Signin from './Routes/Signin'
 import Test from './Routes/Test'
 
 const Router = () => {
@@ -22,6 +23,7 @@ const Router = () => {
           <Route path="/interior" exact component={Interior} />
           <Route path="/production/:id" exact component={Production} /> 
           <Route path="/login" exact component={Login} />
+          <Route path="/signin" exact component={Signin} />
           <Route path="/test" exact component={Test} />
         </Switch>
       </>

@@ -1,4 +1,9 @@
 import LoginContainer from './LoginContainer'
 
+const Login = () => {
+  return (
+    <LoginContainer />
+  )
+}
 
-export default LoginContainer
+export default Login
