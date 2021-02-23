@@ -5,10 +5,11 @@ export const HeaderContext = React.createContext()
 
 const HeaderContextProvider = ({ children }) => {
   // 
-  const [click] = useState({
+  const [click, setClick] = useState({
     store: ["스토어", "홈카테고리", "신혼가구", "베스트", "오늘의딜", "연휴특가", "월동준비", "리퍼마켓", "기획전"],
     community: ["홈", "사진", "집들이", "노하우", "전문가집들이", "셀프가이드", "질문과 답변", "이벤트"],
-    interior: ["시공홈", "시공스토어"]
+    interior: ["시공홈", "시공스토어"],
+    hoverCheck: ""
   });
 
   // 글쓰기 드롭다운 내용
@@ -29,14 +30,15 @@ const HeaderContextProvider = ({ children }) => {
   // search input 관련 함수 - 나중에는 axios로 받아 올 수 있지 않을까해서 context에 넣어둠
   const [currentlySearch, setCurrentlySearch] = useState({
     list: [],
-    display: "false"
+    display: "false",
+    forBlur: "false"
   })
     
   
 
 
   return (
-  <HeaderContext.Provider value={{click, write, changeDisplay, currentlySearch, setCurrentlySearch}}>
+  <HeaderContext.Provider value={{click, setClick, write, changeDisplay, currentlySearch, setCurrentlySearch}}>
     {children}
   </HeaderContext.Provider>
   );

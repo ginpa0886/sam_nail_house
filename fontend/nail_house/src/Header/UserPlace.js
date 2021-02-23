@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import '../Asset/icomoon/style.css'
 
-const UserItem = styled.div`
+const UserItem = styled.i`
   width: 32px;
   height: 32px;
   font-size: 24px;
@@ -12,7 +12,7 @@ const UserItem = styled.div`
   color: #858896;
   margin-right: 8px;
   text-align: center;
-
+  
   &:hover{
     background-color: #3DA8F5;
     color: #FFFFFF;
@@ -36,10 +36,15 @@ const UserIcon = styled.div`
     cursor: pointer;
     border: 2px solid #3DA8F5;
   }
+
+  &:focus{
+    outline: none;
+  }
 `;
 
 const ForDisplay = styled.div`
   display: ${props => props.display === "true" ? "block" : "none"};
+  opacity: ${props => props.display === "true" ? 1 : 0.5};
   position: absolute;
   top: 43px;
   left: -64px;
@@ -94,7 +99,7 @@ const UserPlace = () => {
       <UserItem className="icon-Bookmark"></UserItem>
       <UserItem className="icon-Bell"></UserItem>
       <UserItem className="icon-Cart"></UserItem>
-      <UserIcon bgUser={require("../Asset/userIcon/userIcon.jpg").default} onClick={DisplayChange}>
+      <UserIcon bgUser={require("../Asset/userIcon/userIcon.jpg").default} onClick={DisplayChange} tabIndex="0" onBlur={() => setUserDo({ ...userDo, nowDisplay: "false"})}>
         <ForDisplay display={userDo.nowDisplay}>
           <UserCanDoContainer>
             {userDo && userDo.do.map((value, index) => {

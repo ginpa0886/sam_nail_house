@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { logDOM } from '@testing-library/react';
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import '../Asset/icomoon/style.css'
 import { HeaderContext } from './context'
@@ -26,7 +27,7 @@ const Input = styled.input`
   }
 `;
 
-const DropdownContainer = styled.div`
+const DropdownContainer = styled.ul`
   display: ${props => (props.display === "true" ? "block" : "none")};
   position: absolute;
   width: 264px;
@@ -40,9 +41,13 @@ const DropdownContainer = styled.div`
   border-radius: 4px;
   top: 44px;
   left: 0px;
+
+  &:focus{
+    outline:none;
+  }
 `;
 
-const NewlyKey = styled.div`
+const NewlyKey = styled.li`
   display:flex;
   justify-content: space-between;
   align-items: center;
@@ -57,10 +62,13 @@ const NewlyKeyContent = styled.div`
 
   &:last-child{
     cursor: pointer;
+    &:active{
+      opacity: 0.5;
+    }
   }
 `;
 
-const ItemContainer = styled.div`
+const ItemContainer = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -89,7 +97,7 @@ const ItemIcon = styled.div`
   }
 `;
 
-const SerachIcon = styled.div`
+const SerachIcon = styled.i`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -100,21 +108,24 @@ const SerachIcon = styled.div`
   top: 10px;
 `;
 
+
+
+
 const SearchInput = () => {
   const [search, setSearch] = useState("")
   const { currentlySearch, currentlySearch: { list, display }, setCurrentlySearch } = useContext(HeaderContext)
+  let forBlur = false;
 
   // form 제출 함수
   const userSubmit = (e) => {
     e.preventDefault()
     if(search !== ""){
-      setCurrentlySearch({...currentlySearch, list: [...list, search], display: "true"})
+      setCurrentlySearch({...currentlySearch, list: [search, ...list], display: "true"})
       // console.log(currentlySearch);
       // console.log(list);
     }
     setSearch("")
   }
-  
 
   // input에 value 입력시 실행되는 함수
   const userChange = e => {
@@ -122,13 +133,6 @@ const SearchInput = () => {
     setSearch(value)
   }
 
-  // useEffect(() => {
-  //   if(list.length !== 0){
-  //     setCurrentlySearch({...currentlySearch, display: "true"})
-  //   }else{
-  //     setCurrentlySearch({...currentlySearch, display: "false"})
-  //   }
-  // }, userSubmit)
   const removeAll = () => {
     setCurrentlySearch({
       list: [],
@@ -152,14 +156,7 @@ const SearchInput = () => {
     setCurrentlySearch({...currentlySearch, list: [...fixList]})
   }
 
-  // blur됐을때 최근 검색창 display: none으로 바뀌게 만드는 것
-  const whenBlur = () => {
-    // console.log(e);
-    // const { target } = e;
-    // console.log(target);
-    // window.document.getSelection()
-    setCurrentlySearch({...currentlySearch, display: "false"})
-  }
+
 
   // focus 됐을 때 함수
   const whenFocus = (list) => {
@@ -170,6 +167,21 @@ const SearchInput = () => {
     }
   }
 
+  const whenBlurOnForm = () => {
+    if(forBlur === true){
+      return
+    }else{
+      setCurrentlySearch({...currentlySearch, display: "false"})
+    }
+  }
+
+  const MouseEnter = () => {
+    forBlur = true;
+  }
+
+  const onMouseLeave = () => {
+    forBlur = false;
+  }
 
   // 항상 감시하는 친구
   useEffect(() => {
@@ -179,13 +191,13 @@ const SearchInput = () => {
       setCurrentlySearch({...currentlySearch, display: "true"})
     }
   }, [list])
-  
+
   return (
     <>
-      <Form onSubmit={userSubmit} onFocus={() => whenFocus(list)}>
+      <Form onSubmit={userSubmit} onBlur={whenBlurOnForm}>
         <SerachIcon className="icon-Search"></SerachIcon>
-        <Input value={search} type="text" placeholder={"스토어 검색"} onChange={userChange} />
-        <DropdownContainer display={display}>
+        <Input value={search} type="text" placeholder={"스토어 검색"} onChange={userChange} onFocus={() => whenFocus(list)} />
+        <DropdownContainer display={display} tabIndex="0" onBlur={() => setCurrentlySearch({...currentlySearch, display: "false"})} onMouseEnter={MouseEnter} onMouseLeave={onMouseLeave}>
           <NewlyKey>
             <NewlyKeyContent>최근 검색어</NewlyKeyContent>
             <NewlyKeyContent onClick={removeAll}>전체 삭제</NewlyKeyContent>
@@ -210,3 +222,21 @@ const SearchInput = () => {
 }
 
 export default SearchInput
+
+
+
+
+
+
+// --------------------------
+// const BlurHandler = () => {
+//   console.log("블러 실행");
+//   forBlur = setTimeout(() => {
+//     setCurrentlySearch({...currentlySearch, display: "false"})
+//   })
+// }
+
+// const FocusHandler = () => {
+//   console.log("클리어 실행");
+//   clearTimeout(forBlur)
+// }

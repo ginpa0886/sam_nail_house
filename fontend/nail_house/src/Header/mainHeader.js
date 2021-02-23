@@ -5,6 +5,7 @@ import '../Asset/icomoon/style.css'
 import { HeaderContext } from './context'
 import SearchInput from './SearchInput'
 import UserPlace from './UserPlace'
+import SubHeader from './SubHeader'
 
 
 const Headers = styled.header`
@@ -59,6 +60,10 @@ const Navi = styled.li`
   &:hover{
     cursor: pointer;
     color: #3DA8F5;
+  }
+
+  &:active{
+    opacity: 0.5;
   }
 `;
 
@@ -128,7 +133,30 @@ const WriteThing = styled.div`
 
 
 const MainHeader = ({ location : { pathname }}) => {
-  const {write: {content, dropdown}, changeDisplay} = useContext(HeaderContext)
+  const { click, click: { hoverCheck }, setClick, write: {content, dropdown}, changeDisplay} = useContext(HeaderContext)
+
+  //메모... (props)일때 consoloe.log({ props })로 볼 수 있음.
+  // console.log({ props });
+
+  const checkHoverNavi = (e) => {
+    const { target: { innerText } } = e;
+    const TypeText = innerText;
+
+    switch(TypeText){
+      case "커뮤니티":
+        setClick({...click, hoverCheck: "community"})
+        return 
+      case "스토어":
+        setClick({...click, hoverCheck: "store"})
+        return 
+      case "인테리어시공":
+        setClick({...click, hoverCheck: "interior"})
+        return
+      default: setClick({...click, hoverCheck: "community"})
+        return
+    }
+  }
+  
   return (
     <>
     <Headers>
@@ -138,9 +166,9 @@ const MainHeader = ({ location : { pathname }}) => {
             <HeaderFlex>
               <SLink to="/"><Home bgLogo={require('../Asset/homepageLogo/Logo.png').default} currnet={pathname === '/'}></Home></SLink>
               <List>
-                <Navi currnet={pathname === '/community'}><SLink to="/community">커뮤니티</SLink></Navi>
-                <Navi currnet={pathname === '/store'}><SLink to="/store">스토어</SLink></Navi>
-                <Navi currnet={pathname === '/interior'}><SLink to="/interior">인테리어시공</SLink></Navi>
+                <Navi currnet={pathname === '/community'} onMouseEnter={checkHoverNavi}><SLink to="/community">커뮤니티</SLink></Navi>
+                <Navi currnet={pathname === '/store'} onMouseEnter={checkHoverNavi}><SLink to="/store">스토어</SLink></Navi>
+                <Navi currnet={pathname === '/interior'} onMouseEnter={checkHoverNavi}><SLink to="/interior">인테리어시공</SLink></Navi>
               </List>
               <SerachArea>
                 <SearchInput />
@@ -160,6 +188,7 @@ const MainHeader = ({ location : { pathname }}) => {
             </HeaderFlex>
           </Col>
         </Row>
+        <SubHeader />
       </Container>
     </Headers>
     </>

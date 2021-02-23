@@ -6,16 +6,14 @@ import Dispage from '../../Components/Dispage'
 import { ProductionContext } from './context'
 
 const ProductionContainer = ({ match: { params: { id } }}) => {
-  const { detail, setDetail, getProductionInfo } = useContext(ProductionContext)
+  const { detail, detail : { loading }, setDetail, getProductionInfo } = useContext(ProductionContext)
   const productionId = id
-  // console.log(detail);
   
-
   useEffect(() => {
-    getProductionInfo(productionId)   
+    if(!loading){
+      getProductionInfo(productionId, detail);
+    }   
   })
-  
-  
 
   return (
     <>

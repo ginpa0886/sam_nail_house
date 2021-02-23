@@ -5,8 +5,8 @@ export const ProductionContext = React.createContext()
 
 const ProdcutionContextProvider = ({ children }) => {
   const [detail, setDetail] = useState({
-    productioninfo: null,
-    loading: true,
+    productioninfo: {},
+    loading: false,
   })
 
   const getProductionInfo = async(id) => {
@@ -14,18 +14,16 @@ const ProdcutionContextProvider = ({ children }) => {
     if(typeId){
       try{
         const {data: { productionDetail }} = await productionApi.ProductionInfo(typeId)
-
         if(productionDetail){
-          console.log(productionDetail);
-          // setDetail({...detail, productioninfo: productionDetail})
-          return
+          // console.log(productionDetail);
+          // console.log(detail);
+          setDetail({...detail, productioninfo: {...productionDetail}, loading: true})
         }else{
-          console.log();
           return
         }
-
       } catch(e){
-        console.log("에러가 뜨면 안되는데 에러가 떠요");
+        console.log(e);
+        return 
       }
 
     }else{

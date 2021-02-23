@@ -7,7 +7,6 @@ const Header = () => {
     <>
     <HeaderContextProvider>
       <MainHeader />
-      <SubHeader />
     </HeaderContextProvider>
     </>
   )

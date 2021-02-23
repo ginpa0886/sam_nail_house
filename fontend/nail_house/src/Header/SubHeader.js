@@ -30,14 +30,18 @@ const Item = styled.div`
     cursor: pointer;
     color: #3DA8F5;
   }
+  
+  &:active{
+    opacity: 0.5;
+  }
 `;
 
-const SubHeader = ({ location : { pathname }}) => {
-  const nowPath = pathname.split('/')[1]
-  const { click: { community, store, interior } } = useContext(HeaderContext);
+const SubHeader = () => {
+  // const nowPath = pathname.split('/')[1]
+  const { click: { community, store, interior, hoverCheck } } = useContext(HeaderContext);
   let sub = [];
   
-  switch(nowPath){
+  switch(hoverCheck){
     case "community":
       sub = community
       break;
@@ -54,15 +58,13 @@ const SubHeader = ({ location : { pathname }}) => {
 
   return (
     <>
-      <Container className="container">
-        <Row className="row">
-          <Col className="col-12">
-            <Navi>
-              {sub.map((value, index) => (<Item key={index}>{value}</Item>))}
-            </Navi>
-          </Col>
-        </Row>
-      </Container>
+      <Row className="row">
+        <Col className="col-12">
+          <Navi>
+            {sub.map((value, index) => (<Item key={index}>{value}</Item>))}
+          </Navi>
+        </Col>
+      </Row>
     </>
   );
 }
