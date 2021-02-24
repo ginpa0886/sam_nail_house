@@ -1,8 +1,11 @@
 import SigninContainer from './SigninContainer'
+import SiginContextProvider from './context'
 
 const Signin = () => {
   return (
-    <SigninContainer />
+    <SiginContextProvider>
+      <SigninContainer />
+    </SiginContextProvider>
   )
 }
 

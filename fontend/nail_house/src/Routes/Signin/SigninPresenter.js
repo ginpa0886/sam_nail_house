@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import '../../Asset/icomoon/style.css'
+import { SigninContext } from './context'
+import SigninEmail from './Children/SigninEmail'
+import SigninPassword from './Children/SigninPassword'
+import AgreementForm from './Children/AgreementForm'
+import Nickname from './Children/Nickname'
 
 const Container = styled.div``;
 const Row = styled.div``;
@@ -64,82 +69,7 @@ const TwoDviIcon = styled.div`
     margin-right: 0;
   }
 `;
-const ThridContainer = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:flex-start;
-  margin-bottom:30px;
-`;
 
-const ThirdDvi = styled.div`
-  margin-bottom:12px;
-`;
-const ThirdDivContent = styled.div`
-  color:#292929;
-  font-size:15px;
-  line-height:21px;
-  font-weight:700;
-
-`;
-
-const ThirdInputContainer = styled.div`
-  display:flex;
-  justify-content:center;
-  align-items:center;
-`;
-
-const ThirdInput = styled.input`
-  height:40px;
-  padding: 0 15px;
-  border: solid 1px #dbdbdb;
-  font-size: 15px;
-  border-radius: 4px;
-  color: rgb(66, 66, 66);
-  margin-bottom:12px;
-`;
-
-const ThirdInputDiv = styled.div`
-  color:#dbdbdb;
-  text-align:center;
-  font-size:13px;
-  line-height:40px;
-  letter-spacing:-0.4px;
-`;
-const ThirdInputDropdownContainer = styled.div`
-  position: relative;
-`;
-
-const ThirdInputDropdown = styled.button`
-  width:100%;
-  background-color:white;
-  border: solid 1px #dbdbdb;
-  text-align:center;
-  border-radius:4px;
-  
-
-  &:hover{
-    background-color: #dbdbdb;
-  }
-
-  &:focus{
-    outline:none;
-  }
-`;
-
-const ThirdInputDropdownIcon = styled.i`
-  position:absolute;
-  top:10px;
-  right:10px;
-`;
-
-const PasswordContainer = styled.div`
-  margin-bottom:30px;
-
-  &:last-child{
-    margin-bottom:0;
-  }
-`;
 const PasswordHeader = styled.div`
   font-size: 15px;
   color:#292929;
@@ -149,85 +79,6 @@ const PasswordHeader = styled.div`
   margin-bottom:12px;
 `;
 
-const PasswordSubHeader = styled.div`
-  color:#757575;
-  font-size:13px;
-  line-height:1.4;
-  letter-spacing:-0.4px;
-`;
-const PasswordInput = styled.input`
-  height:40px;
-  width:100%;
-  padding:0 15px;
-  border-radius:4px;
-  border:solid 1px #dbdbdb;
-  font-size:15px;
-  color:#424242;
-  margin-top:10px;
-`;
-
-const Agreement = styled.div`
-  border:1px solid #dbdbdb;
-  padding:23px 23px 6px 16px;
-  margin-bottom:30px;
-`;
-
-const AgDiv = styled.div`
-  display:flex;
-  justify-content:flex-start;
-  align-items:center;
-  padding-bottom:18px;
-  margin-bottom:16px;
-  &:first-child{
-    border-bottom:1px solid #ededed;
-  }
-
-  &:last-child{
-    margin-bottom:0;
-  }
-`;
-
-const Agbutton = styled.button`
-  width:22px;
-  height:22px;
-  background-color: white;
-  border-radius:4px;
-  border:solid 1px #dbdbdb;
-  &:hover{
-    cursor: pointer;
-  }
-`;
-
-const AgHeadContent = styled.div`
-  color:#424242;
-  font-size:14px;
-  letter-spacing:-0.4px;
-  line-height:1;
-  padding-left:10px;
-  font-weight:700;
-`;
-
-const AgContent = styled.div`
-  color:#424242;
-  font-size:14px;
-  letter-spacing:-0.4px;
-  line-height:1;
-  padding-left:10px;
-`;
-const AgSpan = styled.span`
-  color:#35c5f0;
-  font-size:12px;
-  margin-left:4px;
-  line-height:18px;
-  letter-spacing:-0.4px;
-`;
-const AgDiSpan = styled.span`
-  color:#bdbdbd;
-  font-size:12px;
-  margin-left:4px;
-  line-height:18px;
-  letter-spacing:-0.4px;
-`;
 
 const SubmitButton = styled.button`
   background-color:#35c5f0;
@@ -271,7 +122,45 @@ const SLink = styled(Link)`
   }
 `;
 
+const Form = styled.form``;
+
 const SigninPresenter = () => {
+  const { dropdown : { isEmailRight }, password : { isRight }, nickname: { isNickRigth }, agreement: { needCheck }, postUser} = useContext(SigninContext)
+  let submitCheck = false;
+
+const checkSubmit = (e) => {
+  const { target : { children }} = e;
+  const email1 = children[0].children[1].children[0].value;
+  const email2 = children[0].children[1].children[2].children[0].children[0].innerText;
+  const pw1 = children[1].children[2].value;
+  const pw2 = children[2].children[1].value;
+  const nickname1 = children[3].children[2].value;
+
+  const realEmail = `${email1}@${email2}`
+  const realPw = pw2;
+  const nickName = nickname1;
+  // console.log(
+  //   `email1: ${email1}
+  //   email2: ${email2}
+  //   pw1: ${pw1}
+  //   pw2:${pw2}
+  //   nickname1:${nickname1}
+  //   `
+  // );
+  
+
+  // 1차 확인
+  if(isEmailRight === "true" && isRight === "true" && isNickRigth === "true" && needCheck === "true"){
+      submitCheck = true
+  }else{
+    return
+  }
+
+  if(submitCheck === true){
+    postUser(realEmail, realPw, nickName)
+  }
+}
+
   return (
     <>
       <Container className="container">
@@ -308,75 +197,20 @@ const SigninPresenter = () => {
         <Row className="row">
           <Col className="col-4"></Col>
           <Col className="col-4">
-            <ThridContainer>
-              <ThirdDvi>
-                <ThirdDivContent>이메일</ThirdDivContent>
-              </ThirdDvi>
-              <ThirdInputContainer>
-                <ThirdInput placeholder="이메일" />
-                <ThirdInputDiv>@</ThirdInputDiv>
-                <ThirdInputDropdownContainer>
-                  <ThirdInputDropdown>선택해주세요</ThirdInputDropdown>
-                  <ThirdInputDropdownIcon className="icon-Chevron"></ThirdInputDropdownIcon>
-                </ThirdInputDropdownContainer>
-              </ThirdInputContainer>
-            </ThridContainer>
-            <PasswordContainer>
-              <PasswordHeader>비밀번호</PasswordHeader>
-              <PasswordSubHeader>8자 이상 입력해주세요.</PasswordSubHeader>
-              <PasswordInput placeholder="비밀번호"/>
-            </PasswordContainer>
-            <PasswordContainer>
-              <PasswordHeader>비밀번호 확인</PasswordHeader>
-              <PasswordInput placeholder="비밀번호 확인"/>
-            </PasswordContainer>
-            <PasswordContainer>
-              <PasswordHeader>별명</PasswordHeader>
-              <PasswordSubHeader>다른 유저와 겹치지 않는 별명을 입력해주세요. (2~15자)</PasswordSubHeader>
-              <PasswordInput placeholder="별명 (2~15자)"/>
-            </PasswordContainer>
-            <PasswordHeader>약관 동의</PasswordHeader>
-            <Agreement>
-              <AgDiv>
-                <Agbutton></Agbutton>
-                <AgHeadContent>전체동의</AgHeadContent>
-              </AgDiv>
-              <AgDiv>
-                <Agbutton></Agbutton>
-                <AgContent>
-                  만 14세 이상입니다.
-                  <AgSpan>(필수)</AgSpan>
-                </AgContent>
-              </AgDiv>
-              <AgDiv>
-                <Agbutton></Agbutton>
-                <AgContent>
-                  이용약관
-                  <AgSpan>(필수)</AgSpan>
-                </AgContent>
-              </AgDiv>
-              <AgDiv>
-                <Agbutton></Agbutton>
-                <AgContent>
-                  개인정보처리방침
-                  <AgSpan>(필수)</AgSpan>
-                </AgContent>
-              </AgDiv>
-              <AgDiv>
-                <Agbutton></Agbutton>
-                <AgContent>
-                  이벤트, 알림 메일 및 SMS 수신
-                  <AgDiSpan>(선택)</AgDiSpan>
-                </AgContent>
-              </AgDiv>
-            </Agreement>
-            <SubmitButton>
-              <SubmitContent>회원가입 완료</SubmitContent>
-            </SubmitButton>
-            <Footer>
-              <FooterContent>이미 아이디가 있으신가요?</FooterContent>
-              <SLink to="/">로그인</SLink>
-            </Footer>
+            <Form onSubmit={checkSubmit}>
+              <SigninEmail />
+              <SigninPassword />
+              <Nickname />
+              <PasswordHeader>약관 동의</PasswordHeader>
+              <AgreementForm />
+              <SubmitButton type="submit">
+                <SubmitContent>회원가입 완료</SubmitContent>
+              </SubmitButton>
+              <Footer>
+                <FooterContent>이미 아이디가 있으신가요?</FooterContent>
+                <SLink to="/">로그인</SLink>
+              </Footer>
+            </Form>
           </Col>
           <Col className="col-4"></Col>
         </Row>

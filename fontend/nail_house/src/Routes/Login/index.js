@@ -1,8 +1,11 @@
 import LoginContainer from './LoginContainer'
+import LoginContextProvieder from './context'
 
 const Login = () => {
   return (
-    <LoginContainer />
+    <LoginContextProvieder>
+      <LoginContainer />
+    </LoginContextProvieder>
   )
 }
 

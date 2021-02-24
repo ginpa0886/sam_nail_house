@@ -23,7 +23,7 @@ const Router = () => {
           <Route path="/interior" exact component={Interior} />
           <Route path="/production/:id" exact component={Production} /> 
           <Route path="/login" exact component={Login} />
-          <Route path="/signin" exact component={Signin} />
+          <Route path="/tt" exact component={Signin} />
           <Route path="/test" exact component={Test} />
         </Switch>
       </>

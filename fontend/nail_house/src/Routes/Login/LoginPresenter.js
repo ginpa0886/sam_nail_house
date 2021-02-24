@@ -132,7 +132,7 @@ const NotUser = styled.div`
 `;
 
 const Footer = styled.footer`
-  margin: -5px 0 25px;
+  margin: 20px 0 25px 0;
   text-align: center;
   color: #757575;
   font-size: 10px;
@@ -165,18 +165,12 @@ const LoginPresenter = () => {
                 <Sns bgSns={require('../../Asset/ForLogin/naver_logo.png').default}></Sns>
               </SnsContainer>
               <NotUser>비회원 주문 조회하기</NotUser>
+              <Footer>
+                <FooterSpan>©Bucketplace Inc. All Rights Reserved</FooterSpan>
+              </Footer>
             </LoginContainer>
           </Col>
           <Col className="col-4"></Col>
-        </Row>
-        <Row className="row">
-        <Col className="col-4"></Col>
-        <Col className="col-4">
-          <Footer>
-            <FooterSpan>©Bucketplace Inc. All Rights Reserved</FooterSpan>
-          </Footer>
-        </Col>
-        <Col className="col-4"></Col>
         </Row>
       </Container>
     </>

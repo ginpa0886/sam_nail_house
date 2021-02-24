@@ -9,3 +9,12 @@ export const productionApi = {
     
 }
 
+export const userApi = {
+    UserSignin: (email, pw, nickname) => api.post('user/new', {
+      email, pw, nickname
+    }),
+    UserLogin: (email, pw) => api.post('user/signin', {
+      email, pw
+    })
+}
+

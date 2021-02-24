@@ -7,12 +7,12 @@ const Button = styled.button`
 
 
 
-const UseButton = ({ css, content }) => {
+const UseButton = ({ css, content, prop}) => {
   const { CSS } = css;
   
 
   return (
-      <Button css={CSS}>{content}</Button>
+      <Button css={CSS} cssprop={prop}>{content}</Button>
   )
 }
 
