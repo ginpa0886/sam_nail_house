@@ -9,6 +9,7 @@ import Interior from './Routes/Interior'
 import Login from './Routes/Login'
 import Signin from './Routes/Signin'
 import Test from './Routes/Test'
+import CheckMiddleware from './Routes/CheckMiddleware'
 
 const Router = () => {
   return (
@@ -16,6 +17,7 @@ const Router = () => {
     <Routers>
       <>
         <Header />
+        <Route path="*" component={CheckMiddleware} />
         <Switch>
           <Route path="/" exact component={Home}/>
           <Route path="/community" exact component={Community} />
@@ -23,7 +25,7 @@ const Router = () => {
           <Route path="/interior" exact component={Interior} />
           <Route path="/production/:id" exact component={Production} /> 
           <Route path="/login" exact component={Login} />
-          <Route path="/tt" exact component={Signin} />
+          <Route path="/signin" exact component={Signin} />
           <Route path="/test" exact component={Test} />
         </Switch>
       </>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { userApi } from '../api'
 
 export const HeaderContext = React.createContext()
 
@@ -33,12 +33,33 @@ const HeaderContextProvider = ({ children }) => {
     display: "false",
     forBlur: "false"
   })
+
+  const [afterLogin, setAfterLogin] = useState({
+    isLogin:"false",
+    loading:"false"
+  })
+
+  const ChecktheLogined = async(id, token) => {
+    try{
+      if(afterLogin.isLogin === "true"){
+        const token = localStorage.getItem("token")
+        const res = await userApi.UserCheck(id, token)
+      }
+      
+      
+      
+      
+    }catch(e){
+      console.log("유저 정보가 만료되었습니다.");
+      return false
+    }
+  }
     
   
 
 
   return (
-  <HeaderContext.Provider value={{click, setClick, write, changeDisplay, currentlySearch, setCurrentlySearch}}>
+  <HeaderContext.Provider value={{click, setClick, write, changeDisplay, currentlySearch, setCurrentlySearch, afterLogin, setAfterLogin, ChecktheLogined}}>
     {children}
   </HeaderContext.Provider>
   );

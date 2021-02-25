@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 import UseInput from '../../Components/UseInput'
 import UseButton from '../../Components/UseButton'
+import { LoginContext } from './context'
 
 const Container = styled.div``;
 const Row = styled.div``;
 const Col = styled.div``;
 
-const LoginContainer = styled.div`
+const LoginContainer = styled.form`
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
@@ -43,8 +45,7 @@ const Sns = styled.div`
   background-position: center center;
 `;
 
-const cssone = {
-  CSS: `
+const Input = styled.input`
   width:100%;
   height:50px;
   font-size:15px;
@@ -52,23 +53,12 @@ const cssone = {
   padding:0 15px;
   color:#424242;
   border:solid 1px #dbdbdb;
-  border-radius:4px 4px 0 0;`
-}
-const placeone = "이메일"
+  border-radius:4px 4px 0 0;
 
-const csstwo = {
-  CSS: `
-  width:100%;
-  height:50px;
-  font-size:15px;
-  padding:0 15px;
-  line-height:50px;
-  color:#424242;
-  border:solid 1px #dbdbdb;
-  border-radius:0 0 4px 4px;`
-}
-
-const placetwo = "비밀번호"
+  &:last-child{
+    border-radius:0 0 4px 4px;
+  }
+`;
 
 const buttoncss = {
   CSS:`
@@ -141,22 +131,62 @@ const Footer = styled.footer`
 `;
 const FooterSpan = styled.span``;
 
+const GotoSginin = styled(Link)`
+
+`;
+
 
 const LoginPresenter = () => {
+  const {email, setEmail, pw, setPw, email:{ inputEmail, checkWrite }, pw:{ inputPw, checkPw }, postUserLogin} =useContext(LoginContext)
+  let checkLogin = false;
+
+  const firstInputchange = (e) => {
+    const { target: { value }} = e;
+    if(value === undefined || value === ""){
+      setEmail({...email, inputEmail:value, checkWrite:"false"})
+    }else{
+      setEmail({...email, inputEmail:value, checkWrite:"true"})
+    }
+    
+  }
+
+  const secondInputchange = (e) => {
+    const { target: { value }} = e;
+    if(value === undefined || value === ""){
+      setPw({...pw, inputPw:value, checkPw:"false"})
+    }else{
+      setPw({...pw, inputPw:value, checkPw:"true"})
+    }
+  }
+
+  const LoginSubmit = (e) => {
+    const {target: { children }} = e;
+    const userEmail = children[1].value;
+    const userPw = children[2].value;
+    // console.log("submit");
+    if(checkPw === "true" && checkWrite === "true" && userEmail && userPw){
+      checkLogin = true;
+    }
+
+    if(checkLogin === true){
+      postUserLogin(userEmail, userPw)
+    }
+  }
+
   return (
     <>
       <Container className="container">
         <Row className="row">
           <Col className="col-4"></Col>
           <Col className="col-4">
-            <LoginContainer>
+            <LoginContainer onSubmit={LoginSubmit}>
               <HomeLogo bgLogo={require('../../Asset/ForLogin/house_logo.png').default}></HomeLogo>
-              <UseInput css={cssone} placeholder={placeone} />
-              <UseInput css={csstwo} placeholder={placetwo} />
-              <UseButton css={buttoncss} content={buttonContent}/>
+              <Input placeholder="이메일" onChange={firstInputchange} value={inputEmail}/>
+              <Input placeholder="비밀번호" onChange={secondInputchange} value={inputPw}/>
+              <UseButton css={buttoncss} content={buttonContent} type="submit"/>
               <Two>
                 <TwoItem>비밀번호 재설정</TwoItem>
-                <TwoItem>회원가입</TwoItem>
+                <TwoItem><GotoSginin to="/signin">회원가입</GotoSginin></TwoItem>
               </Two>
               <SnsContent>Sns계정으로 간편 로그인/회원가입</SnsContent>
               <SnsContainer>

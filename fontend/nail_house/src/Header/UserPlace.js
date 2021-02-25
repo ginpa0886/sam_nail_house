@@ -1,24 +1,63 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import '../Asset/icomoon/style.css'
+import { HeaderContext } from './context'
+
+const ItemContainer = styled.div`
+  width:32px;
+  height:32px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-right: 8px;
+  color: #858896;
+  &:hover{
+    background-color: #3DA8F5;
+    border-radius: 50%;
+    cursor: pointer;
+    color:white;
+  }
+`
 
 const UserItem = styled.i`
-  width: 32px;
-  height: 32px;
   font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #858896;
-  margin-right: 8px;
   text-align: center;
-  
+  position: relative;
+`;
+
+const News = styled.div`
+  position:absolute;
+  color:white;
+  left:12px;
+  bottom:12px;
+  width:16px;
+  height:16px;
+  background-color:#F86D7D;
+  border-radius:50%;
+  font-size:10px;
+  line-height:16px;
+  letter-spacing:-0.01em;
+  font-weight:700;
+`;
+
+const BeforeLogin = styled.div`
+  color: #757575;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: -0.4px;
+  margin-right:10px;
   &:hover{
-    background-color: #3DA8F5;
-    color: #FFFFFF;
-    border-radius: 50%;
-    cursor: pointer;
+    color:#3DA8F5;
   }
+`;
+
+const SLink = styled(Link)`
+
 `;
 
 const UserIcon = styled.div`
@@ -81,6 +120,21 @@ const UserCanDo = styled.div`
 `;
 
 const UserPlace = () => {
+  const { afterLogin:{ isLogin, loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
+  let isUserLogin = false;
+  const id = 71;
+  
+  const token = localStorage.getItem("token")
+  
+  console.log(`토큰을 불러왔습니다. ${token}`);
+  
+
+  if(token && loading === "false"){
+    ChecktheLogined(id, token);
+  }
+    
+  
+
   const [userDo, setUserDo] = useState({
     do: ["마이페이지", "나의 쇼핑", "이벤트", "로그아웃"],
     nowDisplay: "false"
@@ -96,20 +150,46 @@ const UserPlace = () => {
 
   return(
     <>
-      <UserItem className="icon-Bookmark"></UserItem>
-      <UserItem className="icon-Bell"></UserItem>
-      <UserItem className="icon-Cart"></UserItem>
-      <UserIcon bgUser={require("../Asset/userIcon/userIcon.jpg").default} onClick={DisplayChange} tabIndex="0" onBlur={() => setUserDo({ ...userDo, nowDisplay: "false"})}>
-        <ForDisplay display={userDo.nowDisplay}>
-          <UserCanDoContainer>
-            {userDo && userDo.do.map((value, index) => {
-              return (
-                <UserCanDo key={index}>{value}</UserCanDo>
-              )
-            })}
-          </UserCanDoContainer>
-        </ForDisplay>
-      </UserIcon>
+      {isUserLogin === false ? <>
+        <ItemContainer>
+          <UserItem className="icon-Cart">
+          </UserItem>
+        </ItemContainer>
+        <BeforeLogin>
+          <SLink to="/login">로그인</SLink>
+        </BeforeLogin>
+        <BeforeLogin>
+          <SLink to="/signin">회원가입</SLink>
+        </BeforeLogin>
+        </> : <>
+          <ItemContainer>
+            <UserItem className="icon-Bookmark">
+              <News>1</News>
+            </UserItem>
+          </ItemContainer>
+          <ItemContainer>
+            <UserItem className="icon-Bell">
+              <News>1</News>
+            </UserItem>
+          </ItemContainer>
+          <ItemContainer>
+            <UserItem className="icon-Cart">
+              <News>1</News>
+            </UserItem>
+          </ItemContainer>
+          <UserIcon bgUser={require("../Asset/userIcon/userIcon.jpg").default} onClick={DisplayChange} tabIndex="0" onBlur={() => setUserDo({ ...userDo, nowDisplay: "false"})}>
+            <ForDisplay display={userDo.nowDisplay}>
+              <UserCanDoContainer>
+                {userDo && userDo.do.map((value, index) => {
+                  return (
+                    <UserCanDo key={index}>{value}</UserCanDo>
+                  )
+                })}
+              </UserCanDoContainer>
+            </ForDisplay>
+          </UserIcon>
+        </>}
+  
     </>
   )
 }

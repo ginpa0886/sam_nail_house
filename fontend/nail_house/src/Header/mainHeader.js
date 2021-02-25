@@ -135,6 +135,7 @@ const WriteThing = styled.div`
 const MainHeader = ({ location : { pathname }}) => {
   const { click, click: { hoverCheck }, setClick, write: {content, dropdown}, changeDisplay} = useContext(HeaderContext)
 
+  
   //메모... (props)일때 consoloe.log({ props })로 볼 수 있음.
   // console.log({ props });
 

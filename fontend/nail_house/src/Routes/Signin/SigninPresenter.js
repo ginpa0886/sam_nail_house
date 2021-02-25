@@ -121,6 +121,9 @@ const SLink = styled(Link)`
     cursor: pointer;
   }
 `;
+const HLink = styled(Link)`
+
+`;
 
 const Form = styled.form``;
 
@@ -147,7 +150,7 @@ const checkSubmit = (e) => {
   //   nickname1:${nickname1}
   //   `
   // );
-  
+  console.log("실행됨");
 
   // 1차 확인
   if(isEmailRight === "true" && isRight === "true" && isNickRigth === "true" && needCheck === "true"){
@@ -197,7 +200,7 @@ const checkSubmit = (e) => {
         <Row className="row">
           <Col className="col-4"></Col>
           <Col className="col-4">
-            <Form onSubmit={checkSubmit}>
+            <Form onSubmit={checkSubmit} type="submit">
               <SigninEmail />
               <SigninPassword />
               <Nickname />
@@ -208,7 +211,7 @@ const checkSubmit = (e) => {
               </SubmitButton>
               <Footer>
                 <FooterContent>이미 아이디가 있으신가요?</FooterContent>
-                <SLink to="/">로그인</SLink>
+                <SLink to="/login">로그인</SLink>
               </Footer>
             </Form>
           </Col>
