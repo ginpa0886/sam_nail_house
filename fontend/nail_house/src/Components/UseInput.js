@@ -5,12 +5,12 @@ const Input = styled.input`
   ${props => props.css}
 `;
 
-const UseInput = ({ css, placeholder }) => {
+const UseInput = ({ css, placeholder, change }) => {
   const { CSS } = css;
   
 
   return (
-      <Input css={CSS} placeholder={placeholder === undefined ? '' : placeholder}/>
+      <Input css={CSS} placeholder={placeholder === undefined ? '' : placeholder} />
   )
 }
 

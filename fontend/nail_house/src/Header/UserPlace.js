@@ -120,7 +120,7 @@ const UserCanDo = styled.div`
 `;
 
 const UserPlace = () => {
-  const { afterLogin:{ isLogin, loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
+  const { afterLogin, afterLogin:{ isLogin, loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
   let isUserLogin = false;
   const id = 71;
   
@@ -128,12 +128,11 @@ const UserPlace = () => {
   
   console.log(`토큰을 불러왔습니다. ${token}`);
   
-
-  if(token && loading === "false"){
-    ChecktheLogined(id, token);
+  // 토큰 유효성 검증 하는 곳
+  if(token && isLogin === "false"){
+    ChecktheLogined(id);
   }
-    
-  
+
 
   const [userDo, setUserDo] = useState({
     do: ["마이페이지", "나의 쇼핑", "이벤트", "로그아웃"],
@@ -150,7 +149,7 @@ const UserPlace = () => {
 
   return(
     <>
-      {isUserLogin === false ? <>
+      {isLogin === "false" ? <>
         <ItemContainer>
           <UserItem className="icon-Cart">
           </UserItem>

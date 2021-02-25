@@ -39,20 +39,25 @@ const HeaderContextProvider = ({ children }) => {
     loading:"false"
   })
 
-  const ChecktheLogined = async(id, token) => {
+  // 토큰 유효성 검사하는 곳
+  const ChecktheLogined = async(id) => {
     try{
-      if(afterLogin.isLogin === "true"){
-        const token = localStorage.getItem("token")
-        const res = await userApi.UserCheck(id, token)
+      const token = localStorage.getItem("token")
+      const res = await userApi.UserCheck(id, token);
+      console.log(`res = ${res}`);
+      if(res){
+        console.log("check");
+        setAfterLogin({...afterLogin, isLogin: "true"})
+      }else{
+        return 
       }
-      
-      
-      
-      
     }catch(e){
+      localStorage.removeItem("token");
+      setAfterLogin({...afterLogin, isLogin: "false"});
       console.log("유저 정보가 만료되었습니다.");
-      return false
+      return 
     }
+
   }
     
   
