@@ -1,5 +1,4 @@
-import { testApi } from '../../api'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { withRouter } from 'react-router-dom'
 import ProductionPresenter from './ProductionPresenter'
 import Dispage from '../../Components/Dispage'

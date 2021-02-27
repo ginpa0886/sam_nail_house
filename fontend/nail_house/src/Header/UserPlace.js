@@ -129,7 +129,7 @@ const UserPlace = () => {
   
   // 토큰 유효성 검증 하는 곳
   if(token !== null){
-    console.log("여기는 실행되면 안됩니다");
+    
     ChecktheLogined(id);
     isLogin = true;
   }

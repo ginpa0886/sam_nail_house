@@ -52,6 +52,7 @@ const HeaderContextProvider = ({ children }) => {
         return 
       }
     }catch(e){
+      localStorage.removeItem("user_id")
       localStorage.removeItem("token");
       setAfterLogin({...afterLogin, loading:"false"})
       // console.log("유저 정보가 만료되었습니다.");

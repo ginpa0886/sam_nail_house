@@ -67,7 +67,7 @@ const ProductionPresenter = () => {
       <Container className="container">
         <Row className="row">
           <Col className="col-12">
-            {!loading ? <Loader /> : 
+            {loading === false ? <Loader /> : 
             <Categoryul>
               {categoryView.map((value, index) => {
                   const idexA = index;
@@ -95,7 +95,7 @@ const ProductionPresenter = () => {
             </Categoryul> }
           </Col>
         </Row>
-        {!loading ? <Loader /> :
+        {loading === false  ? <Loader /> :
           <>
             <Row className="row">
               <Col className="col-7">

@@ -13,8 +13,19 @@ export const SetHeaderToken = (token) => {
 }
 
 export const productionApi = {
-    ProductionInfo: id => api.get(`production/${id}`)
-    
+    ProductionInfo: id => api.get(`production/${id}`),
+    ProductionCart: (user_cart_id, production_cart_id, option_cart_id, amount) => api.post('cart/', {
+      user_cart_id,
+      production_cart_id,
+      option_cart_id,
+      amount
+    }),
+    ProductionOrder: (user_order_id, production_order_id, option_order_id, amount) => api.post('order/', {
+      user_order_id,
+      production_order_id,
+      option_order_id,
+      amount
+    })
 }
 
 export const userApi = {

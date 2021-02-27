@@ -98,7 +98,7 @@ const ProductionDes1 = () => {
 
   const original = original_price;
   const sellPrice = sell_price;
-  const persentage = Math.floor((sellPrice / original) * 100) ;
+  const persentage = 100 - Math.floor((sellPrice / original) * 100) ;
 
 
   return (

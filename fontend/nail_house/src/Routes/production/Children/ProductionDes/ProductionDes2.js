@@ -30,7 +30,7 @@ const ProductionDes2 = () => {
 
   const sellPrice = sell_price;
   const productionPoint = point;
-  const userPoint = Math.floor(sellPrice * productionPoint/10);
+  const userPoint = Math.floor(sellPrice * productionPoint/100);
   
 
   return (

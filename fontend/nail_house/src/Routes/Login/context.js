@@ -27,7 +27,8 @@ const LoginContextProvieder = ({children}) => {
     const checkedEmail = email;
     const checkedPw = pw;
     const responseFromServer = {
-      token:""
+      token:"",
+      user_id:""
     }
     const id = 71;
     // console.log(checkedEmail, checkedPw);
@@ -36,8 +37,9 @@ const LoginContextProvieder = ({children}) => {
         // 로그인 요청 axios
          const res = await userApi.UserLogin(checkedEmail,checkedPw)
 
-        const { data:{ token }} = res
-        responseFromServer.token = token
+        const { data:{ token, user_id }} = res
+        responseFromServer.token = token;
+        responseFromServer.user_id = user_id;
         
       }catch(e){
         alert("잘못된 정보입니다.")
@@ -47,11 +49,14 @@ const LoginContextProvieder = ({children}) => {
     try{
       // 유저 로그인 확인 axios 요청
       const token = responseFromServer.token
+      const user_id = responseFromServer.user_id
       const response = await userApi.UserCheck(id, token)
 
       // 로컬스토리지 저장
       if(response){
         localStorage.setItem("token", token)
+        localStorage.setItem("user_id", user_id)
+
         return
       }else{
         console.log("token 정보가 올바르지 않습니다.");
