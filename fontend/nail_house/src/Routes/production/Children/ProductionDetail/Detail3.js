@@ -1,14 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-
-const ProductionInfoPrsenter = () => {
-
+const Detail3 = () => {
   return (
     <>
-      
     </>
   )
 }
 
-export default ProductionInfoPrsenter
+export default Detail3

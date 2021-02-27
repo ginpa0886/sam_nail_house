@@ -120,19 +120,24 @@ const UserCanDo = styled.div`
 `;
 
 const UserPlace = () => {
-  const { afterLogin, afterLogin:{ isLogin, loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
-  let isUserLogin = false;
+  const { afterLogin, afterLogin:{ loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
+  let isLogin = false;
   const id = 71;
-  
   const token = localStorage.getItem("token")
   
-  console.log(`토큰을 불러왔습니다. ${token}`);
+  // console.log(`토큰을 불러왔습니다. ${token}`);
   
   // 토큰 유효성 검증 하는 곳
-  if(token && isLogin === "false"){
+  if(token !== null){
+    console.log("여기는 실행되면 안됩니다");
     ChecktheLogined(id);
+    isLogin = true;
   }
 
+  // 토큰이 없을 때
+  else if(token === null){
+    isLogin = false;
+  }
 
   const [userDo, setUserDo] = useState({
     do: ["마이페이지", "나의 쇼핑", "이벤트", "로그아웃"],
@@ -149,7 +154,7 @@ const UserPlace = () => {
 
   return(
     <>
-      {isLogin === "false" ? <>
+      {isLogin === false ? <>
         <ItemContainer>
           <UserItem className="icon-Cart">
           </UserItem>
@@ -176,12 +181,19 @@ const UserPlace = () => {
               <News>1</News>
             </UserItem>
           </ItemContainer>
-          <UserIcon bgUser={require("../Asset/userIcon/userIcon.jpg").default} onClick={DisplayChange} tabIndex="0" onBlur={() => setUserDo({ ...userDo, nowDisplay: "false"})}>
-            <ForDisplay display={userDo.nowDisplay}>
+          <UserIcon 
+            bgUser={require("../Asset/userIcon/userIcon.jpg").default} 
+            onClick={DisplayChange} 
+            tabIndex="0" 
+            onBlur={() => setUserDo({ ...userDo, nowDisplay: "false"})}>
+            <ForDisplay 
+              display={userDo.nowDisplay}>
               <UserCanDoContainer>
                 {userDo && userDo.do.map((value, index) => {
                   return (
-                    <UserCanDo key={index}>{value}</UserCanDo>
+                    <UserCanDo 
+                      key={index}>{value}
+                    </UserCanDo>
                   )
                 })}
               </UserCanDoContainer>

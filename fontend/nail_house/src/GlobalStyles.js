@@ -49,7 +49,7 @@ const globalStlyes = createGlobalStyle`
 }
 
 .col-5{
-  width: 41.66666666666667;
+  width: 41.66666666666667%;
   padding: 0 15px;
 }
 

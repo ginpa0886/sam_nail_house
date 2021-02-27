@@ -3,21 +3,22 @@ import { productionApi } from '../../api'
 
 export const ProductionContext = React.createContext()
 
-const ProdcutionContextProvider = ({ children }) => {
+const ProductionContextProvider = ({ children }) => {
   const [detail, setDetail] = useState({
     productioninfo: {},
     loading: false,
   })
 
+  // 상품 세부정보 불러오는 함수
   const getProductionInfo = async(id) => {
     const typeId = +id
     if(typeId){
       try{
         const {data: { productionDetail }} = await productionApi.ProductionInfo(typeId)
         if(productionDetail){
+          
           // console.log(productionDetail);
-          // console.log(detail);
-          setDetail({...detail, productioninfo: {...productionDetail}, loading: true})
+          setDetail({...detail, productioninfo: {...productionDetail}, loading:true})
         }else{
           return
         }
@@ -39,4 +40,4 @@ const ProdcutionContextProvider = ({ children }) => {
   )
 }
 
-export default ProdcutionContextProvider
+export default ProductionContextProvider

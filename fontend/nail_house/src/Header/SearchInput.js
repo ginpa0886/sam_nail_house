@@ -115,7 +115,7 @@ const SearchInput = () => {
   const [search, setSearch] = useState("")
   const { currentlySearch, currentlySearch: { list, display }, setCurrentlySearch } = useContext(HeaderContext)
   let forBlur = false;
-
+  
   // form 제출 함수
   const userSubmit = (e) => {
     e.preventDefault()

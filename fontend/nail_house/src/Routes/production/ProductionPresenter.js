@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import Loader from '../../Components/Loader'
 import { ProductionContext } from './context'
 import '../../Asset/icomoon/style.css'
-import ProductionInfoPrsenter from './ProductionInfoPresenter'
+import ProductionMainImg from './Children/ProductionMainImg'
+import ProductionDes from './Children/ProductionDes'
+import ProductionGnb from './Children/ProductionGnb'
+import ProductionDetail from './Children/ProductionDetail'
+
 
 const Container = styled.div``;
 const Row = styled.div``;
@@ -14,6 +18,7 @@ const Categoryul = styled.ul`
   justify-content: flex-start;
   align-items: center;
   padding-top: 24px;
+  margin-bottom:40px;
 `;
 
 const Categoryli = styled.li`
@@ -56,7 +61,7 @@ const ProductionPresenter = () => {
     categoryView = category
   }
   
-  console.log(categoryView);
+  // console.log(categoryView);
   return (
     <> 
       <Container className="container">
@@ -90,11 +95,29 @@ const ProductionPresenter = () => {
             </Categoryul> }
           </Col>
         </Row>
-        <Row className="row">
-          <Col className="col-12">
-            <ProductionInfoPrsenter />
-          </Col>
-        </Row>
+        {!loading ? <Loader /> :
+          <>
+            <Row className="row">
+              <Col className="col-7">
+                <ProductionMainImg />
+              </Col>
+              <Col className="col-5">
+                <ProductionDes />
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col className="col-12">
+                <ProductionGnb />
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col className="col-8">
+                <ProductionDetail />
+              </Col>
+            </Row>
+          </>
+        }
+        
       </Container>
     </>
   )

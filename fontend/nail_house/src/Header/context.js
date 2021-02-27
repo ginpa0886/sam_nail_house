@@ -4,7 +4,7 @@ import { userApi } from '../api'
 export const HeaderContext = React.createContext()
 
 const HeaderContextProvider = ({ children }) => {
-  // 
+  // console.log("여기는 context입니다.");
   const [click, setClick] = useState({
     store: ["스토어", "홈카테고리", "신혼가구", "베스트", "오늘의딜", "연휴특가", "월동준비", "리퍼마켓", "기획전"],
     community: ["홈", "사진", "집들이", "노하우", "전문가집들이", "셀프가이드", "질문과 답변", "이벤트"],
@@ -44,17 +44,17 @@ const HeaderContextProvider = ({ children }) => {
     try{
       const token = localStorage.getItem("token")
       const res = await userApi.UserCheck(id, token);
-      console.log(`res = ${res}`);
+      // console.log(`res = ${res}`);
       if(res){
-        console.log("check");
-        setAfterLogin({...afterLogin, isLogin: "true"})
+        // console.log("check");
+        return
       }else{
         return 
       }
     }catch(e){
       localStorage.removeItem("token");
-      setAfterLogin({...afterLogin, isLogin: "false"});
-      console.log("유저 정보가 만료되었습니다.");
+      setAfterLogin({...afterLogin, loading:"false"})
+      // console.log("유저 정보가 만료되었습니다.");
       return 
     }
 
