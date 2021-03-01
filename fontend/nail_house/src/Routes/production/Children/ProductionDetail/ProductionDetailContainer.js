@@ -2,8 +2,9 @@ import React from 'react'
 import Detail0 from './Detail0'
 import Detail1 from './Detail1'
 import Detail2 from './Detail2'
-import Detail3 from './Detail3'
-import Detail4 from './Detial4'
+import Review1 from './Review1'
+import Review2 from './Review2'
+import Question1 from './Question1'
 
 const ProductionDetailContainer = () => {
   
@@ -13,8 +14,9 @@ const ProductionDetailContainer = () => {
       <Detail0 />
       <Detail1 />
       <Detail2 />
-      <Detail3 />
-      <Detail4 />
+      <Review1 />
+      <Review2 />
+      <Question1 />
     </>
   )
 }

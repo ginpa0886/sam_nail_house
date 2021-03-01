@@ -55,7 +55,7 @@ const WriteButton = styled.button`
   font-weight:700;
   border:none;
   background-color:white;
-`
+`;
 
 const Body = styled.article`
   display:flex;
@@ -140,7 +140,7 @@ const SoreColor = styled.div`
 `
 
 // 리뷰
-const Detail3 = () => {
+const Review1 = () => {
   const { detail : { productioninfo :{ production: { review }} }} = useContext(ProductionContext)
   const userReivewArray = review
 
@@ -252,4 +252,4 @@ const Detail3 = () => {
   )
 }
 
-export default Detail3
+export default Review1

@@ -6,6 +6,10 @@ const Container = styled.div`
   padding:0 30px 40px 30px;
   margin-bottom:40px;
   border-bottom:1px solid #E0E2E7;
+
+  &:last-child{
+    border-bottom:none;
+  }
 `;
 
 const Div = styled.div``;
@@ -77,7 +81,7 @@ const How = styled.span`
 `;
 
 
-const Detail4 = (index) => {
+const Review2 = (index) => {
   const { detail : { productioninfo :{ production: { reviewUsers }} }} = useContext(ProductionContext)
   const reviewUserArray = reviewUsers
   
@@ -108,7 +112,7 @@ const Detail4 = (index) => {
             <Div>
               <Footer>
                 <Good>도움이 돼요</Good>
-                <Help><How>7</How>명에게 도움이 되었습니다.</Help>
+                <Help><How>{value.good}</How>명에게 도움이 되었습니다.</Help>
               </Footer>
             </Div>
           </Container>
@@ -118,4 +122,4 @@ const Detail4 = (index) => {
   )
 }
 
-export default Detail4
+export default Review2
