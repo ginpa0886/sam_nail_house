@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoon/style.css'
 
 const Section = styled.section`
@@ -16,15 +17,14 @@ const BigContainer = styled.div`
 const BigSubContainer = styled.div`
   position:relative;
   display:flex;
-  justify-content:flex-start;
+  justify-content:center;
   align-items:center;
   overflow:hidden;
 `;
 
 const BigAb = styled.div`
-  &:first-child{
-    margin-left:80px;
-  }
+  left:${props => props.testdisplay};
+  
 `;
 
 const BigItem = styled.div`
@@ -75,7 +75,15 @@ const SamllItem = styled.div`
 
 `;
 
+// 유저들의 스타일링샷
 const Detail1 = () => {
+  const { detail : { productioninfo : {production: { userImg }}}} = useContext(ProductionContext)
+  const userImgArray = userImg
+  const dong = 30
+  const test = (e) => {
+    console.log(e);
+
+  }
   return (
     <>
       <Section>
@@ -83,15 +91,18 @@ const Detail1 = () => {
           <BigContainer>
               <BigSubContainer>
                 <BigAb>
+                  <BigItem bgImg={require('../../../../Asset/ForBug/white.png').default}></BigItem>
+                </BigAb>
+                <BigAb testdisplay={dong}>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-1.png').default}></BigItem>
                 </BigAb>
                 <BigAb>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-2.png').default}></BigItem>
                 </BigAb>
-                <BigAb>
+                {/* <BigAb>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-3.png').default}></BigItem>
-                </BigAb>
-                <BigAb>
+                </BigAb> */}
+                {/* <BigAb>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-5.png').default}></BigItem>
                 </BigAb>
                 <BigAb>
@@ -108,8 +119,8 @@ const Detail1 = () => {
                 </BigAb>
                 <BigAb>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-10.png').default}></BigItem>
-                </BigAb>
-                <NextButton className="icon-Chevron"></NextButton>
+                </BigAb> */}
+                <NextButton className="icon-Chevron" onClick={test}></NextButton>
               </BigSubContainer>
           </BigContainer>
         </Big>
@@ -152,3 +163,39 @@ const Detail1 = () => {
 }
 
 export default Detail1
+
+{/* <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-1.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-2.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-3.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-5.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-6.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-7.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-8.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-9.png').default}></BigItem>
+    </BigAb>
+    <BigAb>
+      <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-10.png').default}></BigItem>
+    </BigAb> */}
+
+    // {userImgArray && userImgArray.map((value, index) => {
+    //   return (
+    //     <BigAb key={index}>
+    //       <BigItem bgImg={value.photo_path}></BigItem>
+    //     </BigAb>
+    //   )
+    // })}

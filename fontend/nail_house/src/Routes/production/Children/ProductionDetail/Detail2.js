@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { ProductionContext } from '../../context'
 
 const Section = styled.section`
   width:692px;
@@ -27,11 +28,20 @@ const Main = styled.article`
 const Des = styled.img`
   width:100%;
   height:auto;
-
 `;
 
 
+// 상품정보 쭉 나오는 곳
 const Detail2 = () => {
+  const { detail : { productioninfo : {production: { img }}}} = useContext(ProductionContext)
+  const imgArray = img;
+  const desImg = imgArray.filter((value) => {
+    if(value.img_description === 1){
+      return value
+    }
+  })
+  // console.log(desImg);
+  // console.log(desImg[0].img_path);
   return (
     <>
       <Section>
@@ -39,12 +49,11 @@ const Detail2 = () => {
           <HeaderContent>상품정보</HeaderContent>
         </Header>
         <Main>
-          <Des src={require('../../../../Asset/ForBug/detail-1.png').default} />
-          <Des src={require('../../../../Asset/ForBug/detail-2.png').default} />
-          <Des src={require('../../../../Asset/ForBug/detail-3.png').default} />
-          <Des src={require('../../../../Asset/ForBug/detail-4.png').default} />
-          <Des src={require('../../../../Asset/ForBug/detail-5.png').default} />
-          <Des src={require('../../../../Asset/ForBug/detail-6.png').default} />
+          {desImg && desImg.map((value, index) => {
+            return (
+                <Des key={index} src={`${value.img_path}`} />
+            )
+          })}    
         </Main>
       </Section>
     </>
@@ -52,3 +61,11 @@ const Detail2 = () => {
 }
 
 export default Detail2
+
+{/* 
+  <Des src={require('../../../../Asset/ForBug/detail-1.png').default} />
+          <Des src={require('../../../../Asset/ForBug/detail-2.png').default} />
+          <Des src={require('../../../../Asset/ForBug/detail-3.png').default} />
+          <Des src={require('../../../../Asset/ForBug/detail-4.png').default} />
+          <Des src={require('../../../../Asset/ForBug/detail-5.png').default} />
+          <Des src={require('../../../../Asset/ForBug/detail-6.png').default} /> */}

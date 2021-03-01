@@ -50,10 +50,10 @@ const ProductionDes4_2 = () => {
     amount:cart.count
   }
 
-  console.log(postInfo);
+  // console.log(postInfo);
   
   const postCart = () => {
-    console.log("post요청 함수는 실행됨");
+    // console.log("post요청 함수는 실행됨");
     postInfo.productionId.map(async(value, index) => {
       if(postInfo.productionId.length !== 0){
         try{
