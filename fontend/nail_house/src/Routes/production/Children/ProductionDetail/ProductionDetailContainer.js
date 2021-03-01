@@ -5,6 +5,8 @@ import Detail2 from './Detail2'
 import Review1 from './Review1'
 import Review2 from './Review2'
 import Question1 from './Question1'
+import Delivery1 from './Delivery1'
+import Refund1 from './Refund'
 
 const ProductionDetailContainer = () => {
   
@@ -17,6 +19,8 @@ const ProductionDetailContainer = () => {
       <Review1 />
       <Review2 />
       <Question1 />
+      <Delivery1 />
+      <Refund1 />
     </>
   )
 }
