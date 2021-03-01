@@ -71,7 +71,12 @@ const Type = styled.div`
   letter-spacing:-0.01em;
   color:rgba(63, 65, 80, 1);
   margin-bottom:8px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 `;
+
+const TypeItem = styled.div``
 
 const TypeDifferent = styled.div`
   color:rgba(61, 168, 245, 1);
@@ -148,7 +153,13 @@ const Question1 = () => {
             return (
                 <BodyContainer key={index}>
                   <BodyHeader>
-                    <Type>{value.type} | {value.option} | {value.answer === 0 ? "미답변" : <TypeDifferent>답변완료</TypeDifferent>}</Type>
+                    <Type>
+                      <TypeItem>{value.type} | </TypeItem>
+                      <TypeItem>{value.option} | </TypeItem>
+                      {value.answer === 0 ? 
+                        <TypeItem>미답변</TypeItem> : 
+                        <TypeDifferent>답변완료</TypeDifferent>}
+                      </Type>
                     <Writer>{resutNick} | 2020년 12월 25일 13시 22분</Writer>
                   </BodyHeader>
                   <BodyBody checkAnswer={value.answer === 0 ? "none" : "10px"}>

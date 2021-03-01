@@ -191,17 +191,18 @@ const Review1 = () => {
             <StarContainer>
               <Stars>
                 {percentage.map((value, index) => {
+                  const indexA = index + 1000;
                   if(index + 1 > totalRating){
                     const per = (1 - ((index + 1) - totalRating)) * 100
                     return (
                       <RatingStar bgimg={require('../../../../Asset/ForBug/Shape (Stroke).png').default} key={index}>
-                        <RatingStarColor bgimg={require('../../../../Asset/ForBug/FilledStar.png').default} widthPer={per}></RatingStarColor>
+                        <RatingStarColor bgimg={require('../../../../Asset/ForBug/FilledStar.png').default} widthPer={per} key={indexA}></RatingStarColor>
                       </RatingStar>
                     )
                   }else{
                     return (
                       <RatingStar bgimg={require('../../../../Asset/ForBug/Shape (Stroke).png').default} key={index}>
-                        <RatingStarColor bgimg={require('../../../../Asset/ForBug/FilledStar.png').default} widthPer={value}></RatingStarColor>
+                        <RatingStarColor bgimg={require('../../../../Asset/ForBug/FilledStar.png').default} widthPer={value} key={indexA}></RatingStarColor>
                       </RatingStar>
                     )
                   }
