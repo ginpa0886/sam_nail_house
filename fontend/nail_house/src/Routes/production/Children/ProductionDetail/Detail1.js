@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoon/style.css'
@@ -23,8 +23,8 @@ const BigSubContainer = styled.div`
 `;
 
 const BigAb = styled.div`
-  left:${props => props.testdisplay};
-  
+  transform:${props => props.forTest === true ? "translateX(-520px)" : "none"};
+  transition:transform 0.35s ease;
 `;
 
 const BigItem = styled.div`
@@ -48,6 +48,9 @@ const NextButton = styled.div`
   right:24px;
   top:240px;
   padding:6px 5px 6px 6px;
+  &:hover{
+    cursor: pointer;
+  }
 `;
 
 
@@ -72,33 +75,78 @@ const SamllItem = styled.div`
   background-position: center center;
   border-radius:4px;
   margin-right:4px;
-
 `;
+
+const Div = styled.div`
+  
+`
 
 // 유저들의 스타일링샷
 const Detail1 = () => {
   const { detail : { productioninfo : {production: { userImg }}}} = useContext(ProductionContext)
   const userImgArray = userImg
-  const dong = 30
-  const test = (e) => {
-    console.log(e);
+  const displayFor = false;
 
+  const [check, setCheck] = useState({
+    index:[0, 1, 2]
+  })
+
+  const [imgArray, setImgArray] = useState({
+    Array:[userImgArray[check.index[0]], userImgArray[check.index[1]], userImgArray[check.index[2]]],
+    count:0
+  })
+
+  const testFnc = () => {
+    const newIndex = check.index.map((value) => value + 1)
+    
+    setCheck({...check, index:newIndex})
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      const newArray = [userImgArray[check.index[0]], userImgArray[check.index[1]], userImgArray[check.index[2]]]
+      setImgArray({...imgArray, Array:newArray})
+    }, 350)
+  }, [check])
+
   return (
     <>
       <Section>
         <Big>
           <BigContainer>
               <BigSubContainer>
-                <BigAb>
-                  <BigItem bgImg={require('../../../../Asset/ForBug/white.png').default}></BigItem>
+                {imgArray.Array.map((value, index) => {
+                  const indexA = index + 1000;
+                  if(value === 0){
+                    return (
+                      <BigAb forTest={displayFor}>
+                        <BigItem bgImg={require('../../../../Asset/ForBug/white.png').default} ></BigItem>
+                      </BigAb>
+                    )
+                  }else if(value === userImgArray.length){
+                    return (
+                      <BigAb forTest={displayFor}>
+                        <BigItem bgImg={require('../../../../Asset/ForBug/white.png').default} ></BigItem>
+                      </BigAb>
+                    )
+                  }else{
+                    return (
+                      <BigAb forTest={displayFor} key={index}>
+                        <BigItem bgImg={value.photo_path} key={indexA}></BigItem>
+                      </BigAb>
+                    )
+                  }
+                })}
+
+                {/* <BigAb forTest={check.display}>
+                  <BigItem bgImg={require('../../../../Asset/ForBug/white.png').default} ></BigItem>
                 </BigAb>
-                <BigAb testdisplay={dong}>
-                  <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-1.png').default}></BigItem>
+                <BigAb forTest={check.display}>
+                  <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-1.png').default} ></BigItem>
                 </BigAb>
-                <BigAb>
-                  <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-2.png').default}></BigItem>
-                </BigAb>
+                <BigAb forTest={check.display}>
+                  <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-2.png').default} ></BigItem>
+                </BigAb> */}
                 {/* <BigAb>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-3.png').default}></BigItem>
                 </BigAb> */}
@@ -120,7 +168,7 @@ const Detail1 = () => {
                 <BigAb>
                   <BigItem bgImg={require('../../../../Asset/ForBug/Thumbnail-10.png').default}></BigItem>
                 </BigAb> */}
-                <NextButton className="icon-Chevron" onClick={test}></NextButton>
+                <NextButton className="icon-Chevron" onClick={testFnc}></NextButton>
               </BigSubContainer>
           </BigContainer>
         </Big>

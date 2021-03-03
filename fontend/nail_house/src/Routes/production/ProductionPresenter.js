@@ -7,11 +7,16 @@ import ProductionMainImg from './Children/ProductionMainImg'
 import ProductionDes from './Children/ProductionDes'
 import ProductionGnb from './Children/ProductionGnb'
 import ProductionDetail from './Children/ProductionDetail'
+import ProductionBar from './Children/ProductionBar'
 
 
 const Container = styled.div``;
 const Row = styled.div``;
 const Col = styled.div``;
+const Test = styled.div`
+  position: relative;
+`;
+
 
 const Categoryul = styled.ul`
   display: flex;
@@ -95,30 +100,35 @@ const ProductionPresenter = () => {
             </Categoryul> }
           </Col>
         </Row>
+      </Container>
         {loading === false  ? <Loader /> :
           <>
+          <Container className="container">
             <Row className="row">
               <Col className="col-7">
                 <ProductionMainImg />
               </Col>
               <Col className="col-5">
+          
                 <ProductionDes />
               </Col>
             </Row>
-            <Row className="row">
-              <Col className="col-12">
-                <ProductionGnb />
-              </Col>
-            </Row>
+          </Container>
+              <ProductionGnb />
+          <Container className="container">
             <Row className="row">
               <Col className="col-8">
                 <ProductionDetail />
               </Col>
+              <Test className="col-4">
+                <ProductionBar />
+              </Test>
             </Row>
+          </Container>
           </>
         }
         
-      </Container>
+      
     </>
   )
 } 

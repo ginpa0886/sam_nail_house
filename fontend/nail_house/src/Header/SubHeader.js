@@ -3,15 +3,13 @@ import { Link, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { HeaderContext } from './context'
 
-const Container = styled.div``;
-const Row = styled.div``;
-const Col = styled.div``;
 const Navi = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 13px 0;
+  padding: 13px 580px;
   border-bottom: 1px solid #E0E2E7;
+  background-color:white;
 `;
 
 const Item = styled.div`
@@ -58,13 +56,9 @@ const SubHeader = () => {
 
   return (
     <>
-      <Row className="row">
-        <Col className="col-12">
           <Navi>
             {sub.map((value, index) => (<Item key={index}>{value}</Item>))}
           </Navi>
-        </Col>
-      </Row>
     </>
   );
 }

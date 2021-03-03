@@ -122,14 +122,14 @@ const UserCanDo = styled.div`
 const UserPlace = () => {
   const { afterLogin, afterLogin:{ loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
   let isLogin = false;
-  const id = 71;
+  const id = localStorage.getItem("user_id")
   const token = localStorage.getItem("token")
-  
+  const profile = localStorage.getItem("profile")
+  console.log(profile);
   // console.log(`토큰을 불러왔습니다. ${token}`);
-  
+  // localStorage.removeItem("token")
   // 토큰 유효성 검증 하는 곳
   if(token !== null){
-    
     ChecktheLogined(id);
     isLogin = true;
   }
@@ -182,7 +182,7 @@ const UserPlace = () => {
             </UserItem>
           </ItemContainer>
           <UserIcon 
-            bgUser={require("../Asset/userIcon/userIcon.jpg").default} 
+            bgUser={profile ? profile : require("../Asset/userIcon/userIcon.jpg").default} 
             onClick={DisplayChange} 
             tabIndex="0" 
             onBlur={() => setUserDo({ ...userDo, nowDisplay: "false"})}>

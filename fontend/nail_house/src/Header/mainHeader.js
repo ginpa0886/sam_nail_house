@@ -9,20 +9,23 @@ import SubHeader from './SubHeader'
 
 
 const Headers = styled.header`
-  
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1000;
+  width:100%;
 `;
 
-const Container = styled.div``;
-const Row = styled.div``;
-const Col = styled.div``;
 
 const HeaderFlex = styled.div`
+  width:100%;
   display:flex;
   justify-content:flex-start;
   align-items: center;
-  padding: 20px 0;
+  padding: 20px 580px;
   background-color: white;
   border-bottom: 1px solid #E0E2E7;
+
 `;
 
 const List = styled.ul `
@@ -127,7 +130,6 @@ const Writebar = styled.div`
 `;
 
 const WriteThing = styled.div`
-
 `;
 
 
@@ -161,36 +163,30 @@ const MainHeader = ({ location : { pathname }}) => {
   return (
     <>
     <Headers>
-      <Container className="container">
-        <Row className="row">
-          <Col className="col-12">
-            <HeaderFlex>
-              <SLink to="/"><Home bgLogo={require('../Asset/homepageLogo/Logo.png').default} currnet={pathname === '/'}></Home></SLink>
-              <List>
-                <Navi currnet={pathname === '/community'} onMouseEnter={checkHoverNavi}><SLink to="/community">커뮤니티</SLink></Navi>
-                <Navi currnet={pathname === '/store'} onMouseEnter={checkHoverNavi}><SLink to="/store">스토어</SLink></Navi>
-                <Navi currnet={pathname === '/interior'} onMouseEnter={checkHoverNavi}><SLink to="/interior">인테리어시공</SLink></Navi>
-              </List>
-              <SerachArea>
-                <SearchInput />
-              </SerachArea>
-              <UserInfoArea>
-                <UserPlace />
-              </UserInfoArea>
-              <Write onClick={() => changeDisplay(dropdown)}>
-                <Writedown>
-                  <WritedownLetter>글쓰기</WritedownLetter>
-                  <WritedownIcon className="icon-Chevron"></WritedownIcon>
-                </Writedown>
-                <Writebar dropdown={dropdown}>
-                  {content && content.map((value, index) => <WriteThing key={index}>{value}</WriteThing>)}
-                </Writebar>
-              </Write>
-            </HeaderFlex>
-          </Col>
-        </Row>
-        <SubHeader />
-      </Container>
+      <HeaderFlex>
+        <SLink to="/"><Home bgLogo={require('../Asset/homepageLogo/Logo.png').default} currnet={pathname === '/'}></Home></SLink>
+        <List>
+          <Navi currnet={pathname === '/community'} onMouseEnter={checkHoverNavi}><SLink to="/community">커뮤니티</SLink></Navi>
+          <Navi currnet={pathname === '/store'} onMouseEnter={checkHoverNavi}><SLink to="/store">스토어</SLink></Navi>
+          <Navi currnet={pathname === '/interior'} onMouseEnter={checkHoverNavi}><SLink to="/interior">인테리어시공</SLink></Navi>
+        </List>
+        <SerachArea>
+          <SearchInput />
+        </SerachArea>
+        <UserInfoArea>
+          <UserPlace />
+        </UserInfoArea>
+        <Write onClick={() => changeDisplay(dropdown)}>
+          <Writedown>
+            <WritedownLetter>글쓰기</WritedownLetter>
+            <WritedownIcon className="icon-Chevron"></WritedownIcon>
+          </Writedown>
+          <Writebar dropdown={dropdown}>
+            {content && content.map((value, index) => <WriteThing key={index}>{value}</WriteThing>)}
+          </Writebar>
+        </Write>
+      </HeaderFlex>
+      <SubHeader />
     </Headers>
     </>
   )

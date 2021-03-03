@@ -60,6 +60,25 @@ const Input = styled.input`
   }
 `;
 
+const Button = styled.button`
+  width:100%;
+  height:50px;
+  padding:13px 15px;
+  font-size:17px;
+  font-weight:bold;
+  line-height:1.41;
+  margin:20px 0;
+  background-color:#35c5f0;
+  color:white;
+  border-radius:4px;
+  border: 1px solid #35c5f0;
+
+  &:hover{
+    cursor: pointer;
+    background-color:rgb(53, 200, 240);
+  }
+`;
+
 const buttoncss = {
   CSS:`
   width:100%;
@@ -183,7 +202,7 @@ const LoginPresenter = () => {
               <HomeLogo bgLogo={require('../../Asset/ForLogin/house_logo.png').default}></HomeLogo>
               <Input placeholder="이메일" onChange={firstInputchange} value={inputEmail}/>
               <Input placeholder="비밀번호" onChange={secondInputchange} value={inputPw}/>
-              <UseButton css={buttoncss} content={buttonContent} type="submit"/>
+              <Button type="submit">로그인</Button>
               <Two>
                 <TwoItem>비밀번호 재설정</TwoItem>
                 <TwoItem><GotoSginin to="/signin">회원가입</GotoSginin></TwoItem>

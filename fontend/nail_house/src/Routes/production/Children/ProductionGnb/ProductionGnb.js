@@ -1,12 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 
+const ForSticky = styled.div`
+  width:100%;
+  position:relative;
+`;
+
 const Container = styled.section`
+  position:-webkit-sticky;
+  width:100%;
   display:flex;
   justify-content:flex-start;
   align-items:center;
   background-color:#F7F8FA;
   margin-bottom:36px;
+  padding:0 580px;
 `;
 
 const ItemContainer = styled.div`
@@ -44,8 +52,9 @@ const Count = styled.span`
 `;
 
 const ProductionGnb = () => {
+  
   return (
-    <>
+    <ForSticky>
       <Container>
         <ItemContainer>
           <Detail>상품정보</Detail>
@@ -62,7 +71,7 @@ const ProductionGnb = () => {
           <Detail>배송/문의</Detail>
         </ItemContainer>
       </Container>
-    </>
+    </ForSticky>
   )
 }
 

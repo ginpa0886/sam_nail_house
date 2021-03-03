@@ -28,21 +28,24 @@ const LoginContextProvieder = ({children}) => {
     const checkedPw = pw;
     const responseFromServer = {
       token:"",
-      user_id:""
+      user_id:"",
+      user_profile:""
     }
-    const id = 71;
     // console.log(checkedEmail, checkedPw);
     if(checkedEmail && checkedPw){
       try{
         // 로그인 요청 axios
-         const res = await userApi.UserLogin(checkedEmail,checkedPw)
+        const res = await userApi.UserLogin(checkedEmail,checkedPw)
 
-        const { data:{ token, user_id }} = res
+        const { data:{ token, user_id, profile }} = res
         responseFromServer.token = token;
         responseFromServer.user_id = user_id;
+        responseFromServer.user_profile = profile
         
+
       }catch(e){
-        alert("잘못된 정보입니다.")
+        alert("잘못된 정보입니다.....")
+        console.log(e);
       }
     }
 
@@ -50,20 +53,27 @@ const LoginContextProvieder = ({children}) => {
       // 유저 로그인 확인 axios 요청
       const token = responseFromServer.token
       const user_id = responseFromServer.user_id
-      const response = await userApi.UserCheck(id, token)
+      const profile = responseFromServer.user_profile
+      const response = await userApi.UserCheck(user_id, token)
 
       // 로컬스토리지 저장
       if(response){
         localStorage.setItem("token", token)
         localStorage.setItem("user_id", user_id)
-
+        localStorage.setItem("profile", profile)
         return
       }else{
         console.log("token 정보가 올바르지 않습니다.");
+        localStorage.removeItem("token")
+        localStorage.removeItem("user_id")
+        localStorage.removeItem("profile")
         return
       }
   
     }catch(e){
+      localStorage.removeItem("token")
+      localStorage.removeItem("user_id")
+      localStorage.removeItem("profile")
       console.log({e});
     }
     // console.log(responseFromServer);
