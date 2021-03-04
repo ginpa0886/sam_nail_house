@@ -37,7 +37,7 @@ export const userApi = {
     }),
     UserCheck: (id, token) => api.get(`user/${id}`, {
       headers: {'_token_': token}
-    })
-    
+    }),
+    UserCart: (id) => api.get(`cart/${id}`)
 }
 

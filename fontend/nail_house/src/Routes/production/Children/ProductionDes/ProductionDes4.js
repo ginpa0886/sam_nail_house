@@ -170,7 +170,7 @@ const ForKey = styled.div`
 
 
 const ProductionDes4 = () => {
-  const {detail: { productioninfo }, cart, cart: {production, price, count, totalmoney, productionId, optionId}, setCart} = useContext(ProductionContext)
+  const {detail: { productioninfo }, cart, cart: {production, price, count, totalmoney, productionId, optionId, loading}, setCart} = useContext(ProductionContext)
   const information = productioninfo;
   const { option, production : { info : { original_price }} } = information;
   const optionArray = option;
@@ -220,7 +220,7 @@ const ProductionDes4 = () => {
     })
   
      if(!production.includes(name)){
-      setCart({...cart, production:[...production, name], price:[...price, cost], count:[...count, 1], productionId:[...productionId, chckoptionId[1]], optionId:[...optionId, chckoptionId[0]], totalmoney:total})
+      setCart({...cart, production:[...production, name], price:[...price, cost], count:[...count, 1], productionId:[...productionId, chckoptionId[1]], optionId:[...optionId, chckoptionId[0]], totalmoney:total, loading:true})
      }else{
        alert("이미 담겨진 상품입니다.")
      }
@@ -228,7 +228,10 @@ const ProductionDes4 = () => {
 
   // 카트에 상품이 추가되면 dropbox의 display가 false로 바뀌게 해주는 useEffect
   useEffect(() => {
-    setButton({...button, firstDisplay:false, secondDisplay:false})
+    if(loading === true){
+      setButton({...button, firstDisplay:false, secondDisplay:false, loading:false})
+    }
+    return
   }, [cart])
 
   

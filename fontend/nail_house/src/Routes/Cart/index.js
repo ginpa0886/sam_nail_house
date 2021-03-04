@@ -1,8 +1,12 @@
-import cartContainer from './cartContainer'
+import CartContainer from './CartContainer'
+import CartContextProvider from './context'
 
 const Cart = () => {
   return (
-    <cartContainer />
+    <CartContextProvider>
+      <CartContainer />
+    </CartContextProvider>
+
   )
 }
 

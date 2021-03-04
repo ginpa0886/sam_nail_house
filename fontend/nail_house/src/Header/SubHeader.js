@@ -7,7 +7,7 @@ const Navi = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 13px 580px;
+  padding: 13px 450px;
   border-bottom: 1px solid #E0E2E7;
   background-color:white;
 `;

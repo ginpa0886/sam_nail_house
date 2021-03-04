@@ -37,18 +37,25 @@ const ProductionContextProvider = ({ children }) => {
     }
   }
 
+  // 구매관련 State
   const [cart, setCart] = useState({
     production:[],
     price:[],
     count:[],
     productionId:[],
     optionId:[],
-    totalmoney:0
-  })
+    totalmoney:0,
+    loading:false
+  });
+
+  // 리뷰쓰기 관련 State
+  const [test, setTest] = useState({
+    reviewDisplay:false
+  });
   
   
   return (
-    <ProductionContext.Provider value={{detail, setDetail, getProductionInfo, cart, setCart}}>
+    <ProductionContext.Provider value={{detail, setDetail, getProductionInfo, cart, setCart, test, setTest}}>
       {children}
     </ProductionContext.Provider>
   )

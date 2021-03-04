@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
+import WriteReview1 from './WriteReview1'
 
 const Container = styled.section`
   margin-bottom:34px;
@@ -55,6 +56,10 @@ const WriteButton = styled.button`
   font-weight:700;
   border:none;
   background-color:white;
+
+  &:hover{
+    cursor: pointer;
+  }
 `;
 
 const Body = styled.article`
@@ -141,9 +146,8 @@ const SoreColor = styled.div`
 
 // 리뷰
 const Review1 = () => {
-  const { detail : { productioninfo :{ production: { review }} }} = useContext(ProductionContext)
+  const { detail : { productioninfo :{ production: { review }}}} = useContext(ProductionContext)
   const userReivewArray = review
-
   const totalReviewCount = userReivewArray.length
   let sumRating = 0
   userReivewArray.map((value) => sumRating += value.rating)
@@ -175,6 +179,12 @@ const Review1 = () => {
   const max = Math.max(...ratingArray)
   
 
+  // 리뷰쓰기 페이지 관련 함수
+  const writeReivewFnc = () => {
+    console.log("실행됨");
+    // setWrite({...write, reviewDisplay:true})
+  }
+
 
   return (
     <> 
@@ -184,7 +194,7 @@ const Review1 = () => {
             <Word>리뷰</Word>
             <Number>{totalReviewCount}</Number>
           </DivHeader>
-          <WriteButton>리뷰쓰기</WriteButton>
+          <WriteButton onClick={writeReivewFnc}>리뷰쓰기</WriteButton>
         </Header>
         <Body>
           <Div>
@@ -218,37 +228,40 @@ const Review1 = () => {
             {ratingArray.map((value, index) => {
               const barWidth = (value / totalReviewCount) * 180
               const sore = ratingArray.length - index
+
+              const indexA = index + 1000;
+              const indexB = index + 2000;
+              const indexC = index + 3000;
+              const indexD = index + 4000;
+              
               if(value === max){
                 const color = "rgba(61, 168, 245, 1)"
                 return (
-                  <>
                     <SoreContainer key={index}>
-                      <Sore forColor={color}>{sore}점</Sore>
-                      <SoreBar>
-                        <SoreColor forWidth={barWidth}></SoreColor>
+                      <Sore forColor={color} key={indexA}>{sore}점</Sore>
+                      <SoreBar key={indexB}>
+                        <SoreColor forWidth={barWidth} key={indexC}></SoreColor>
                       </SoreBar>
-                      <Sore forColor={color}>{value}</Sore>
+                      <Sore forColor={color} key={indexD}>{value}</Sore>
                     </SoreContainer>
-                  </>
                 )
               }else{
                 const color = "rgba(162, 165, 175, 1)"
                 return (
-                  <>
                     <SoreContainer key={index}>
-                      <Sore forColor={color}>{sore}점</Sore>
-                      <SoreBar>
-                        <SoreColor forWidth={barWidth}></SoreColor>
+                      <Sore forColor={color} key={indexA}>{sore}점</Sore>
+                      <SoreBar key={indexB}>
+                        <SoreColor forWidth={barWidth} key={indexC}></SoreColor>
                       </SoreBar>
-                      <Sore forColor={color}>{value}</Sore>
+                      <Sore forColor={color} key={indexD}>{value}</Sore>
                     </SoreContainer>
-                  </>
                 )
               }
             })}
           </Div>
         </Body>
       </Container>
+      <WriteReview1  />
     </>
   )
 }

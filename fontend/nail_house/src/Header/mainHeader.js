@@ -22,7 +22,7 @@ const HeaderFlex = styled.div`
   display:flex;
   justify-content:flex-start;
   align-items: center;
-  padding: 20px 580px;
+  padding: 20px 450px;
   background-color: white;
   border-bottom: 1px solid #E0E2E7;
 

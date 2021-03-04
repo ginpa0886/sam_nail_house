@@ -125,7 +125,7 @@ const UserPlace = () => {
   const id = localStorage.getItem("user_id")
   const token = localStorage.getItem("token")
   const profile = localStorage.getItem("profile")
-  console.log(profile);
+  // console.log(profile);
   // console.log(`토큰을 불러왔습니다. ${token}`);
   // localStorage.removeItem("token")
   // 토큰 유효성 검증 하는 곳

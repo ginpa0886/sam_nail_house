@@ -14,7 +14,7 @@ const Container = styled.section`
   align-items:center;
   background-color:#F7F8FA;
   margin-bottom:36px;
-  padding:0 580px;
+  padding:0 450px;
 `;
 
 const ItemContainer = styled.div`
