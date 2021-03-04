@@ -1,3 +1,4 @@
+const { innerJoin } = require('../../../helper/db')
 const db = require('../../../helper/db')
 
 const User = 'user'
@@ -9,6 +10,8 @@ const Review = 'review'
 const Question = 'question'
 const Cart = 'cart'
 const Order = 'order'
+const ProductionImg = 'production_image'
+const UserPhoto = 'production_user_photo'
 
 // 유저 목록 조회 
 const userList = (page, pageSize) => {
@@ -20,7 +23,7 @@ const userList = (page, pageSize) => {
   }
 
   return db(User)
-      .select('email', 'pw', 'nickname', 'createdAt', 'enabled')
+      .select('*')
       .limit(pageSize)
       .offset((page - 1) * pageSize)
 }
@@ -90,7 +93,7 @@ const productionList = (page, pageSize) => {
       .offset((page - 1) * pageSize)
 }
 
-// 상품_id 를 통한 상품 Detail
+
 
 const testInnerjoin = (id) => {
   return db(Production)
@@ -99,7 +102,7 @@ const testInnerjoin = (id) => {
       
 }
 
-
+// 상품_id 를 통한 상품 Detail
 const productionFindById = (id) => {
   const productionTypeNumberId = +id;
 
@@ -108,6 +111,15 @@ const productionFindById = (id) => {
       .where('production_id', productionTypeNumberId)
       .then(([item]) => item)
 }
+
+
+// 상품 이미지 ID로 조회
+const productionImageById = (id) => {
+  return db(ProductionImg)
+      .select("*")
+      .where("production_image_id", id)
+}
+
 
 // 특정 brand 조회
 const brandByProductionId = (brandId) => {
@@ -123,6 +135,33 @@ const categoryByProductionId = (categoryId) => {
       .select('*')
       .where('category_id', categoryId)
       .then(([item]) => item)
+}
+
+// 유저 포토 테이블 조회
+const userPhotoByProductionId = (id) => {
+  return db(UserPhoto) 
+      .select('*')
+      .where('production_photo_id', id)
+}
+
+const ReviewByProductionId = (id) => {
+  return  db(Review) 
+      .select('*')
+      .where('production_re_id', id)
+}
+
+const reviewUser = (id) => {
+  return db(User)
+      .select("nickname", "profile", "email", "user_id", 'picture', 'text', 'rating', "good")
+      .innerJoin(Review, "user_re_id", "user_id")
+      .where('production_re_id', id)
+}
+
+const QuestionByProductionId = (id) => {
+  return  db(User) 
+      .select('nickname', 'type', 'option', 'text', 'secret', 'answer', 'answer_text')
+      .innerJoin(Question, "user_question_id", "user_id")
+      .where('production_question_id', id)
 }
 
 
@@ -252,6 +291,22 @@ const orderFindById = (id) => {
       .then(([item]) => item)
 }
 
+const orderFindPrice = (id) => {
+  const typeId = +id
+
+  return db(Option)
+      .select('*')
+      .where('option_id', typeId)
+}
+
+const orderFindForPrice = (id) => {
+  const typeId = +id
+
+  return db(Option)
+      .select('*')
+      .where('option_id', typeId)
+}
+
 // 바로구매 등록
 const orderCreate = (cartDetail) => {
   return db(Order)
@@ -281,9 +336,20 @@ const cartFindById = (id) => {
   const typeId = +id
 
   return db(Cart)
+      .select("*")
+      .innerJoin(Production, "production_id", "production_cart_id")
+      .innerJoin(Option, "option_cart_id", "option_id")
+      .innerJoin(Brand, "brand_id", "production_cart_id")
+      .where('user_cart_id', typeId)
+}
+
+// 장바구니 total 가격 확인
+const cartFindForPrice = (id) => {
+  const typeId = +id
+
+  return db(Option)
       .select('*')
-      .where('cart_id', typeId)
-      .then(([item]) => item)
+      .where('option_id', typeId)
 }
 
 // 장바구니 등록
@@ -350,9 +416,14 @@ module.exports = {
   userDelete,
   productionList,
   productionFindById,
+  productionImageById,
   brandByProductionId,
   categoryByProductionId,
+  userPhotoByProductionId,
+  ReviewByProductionId,
+  QuestionByProductionId,
   optionByProductionId,
+  reviewUser,
   optionById,
   productionPost,
   reviewList,
@@ -364,9 +435,12 @@ module.exports = {
   questionCreate,
   orderList,
   orderFindById,
+  orderFindPrice,
+  orderFindForPrice,
   orderCreate,
   cartList,
   cartFindById,
+  cartFindForPrice,
   cartCreate,
   starCount,
   findDeliveryInfo,

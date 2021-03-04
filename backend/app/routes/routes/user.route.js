@@ -30,7 +30,6 @@ router.get('/', async(req, res) => {
 // 유저 생성 API
 router.post('/new', async(req, res) => {
   const { email, pw, nickname, profile } = req.body
-
   if(!email){
     res.status(400).json({message: `"email이 입력되지 않았습니다.`})
   }
@@ -44,7 +43,7 @@ router.post('/new', async(req, res) => {
     const salt = getSalt()
     const user = {
       email,
-      salt,
+      // salt,
       // pw: getHash(pw, salt),
       pw:bcrypt.hashSync(pw, 8),
       nickname,
@@ -61,21 +60,21 @@ router.post('/new', async(req, res) => {
 // 유저 로그인 API
 router.post('/signin', async(req, res) => {
   const { email, pw } = req.body
-
+  
   if(!email){
     res.status(400).json({message: `"email이 입력되지 않았습니다.`})
   }
   if(!pw){
     res.status(400).json({message: `"pw이 입력되지 않았습니다.`})
   }
-
+  
   try{
     const userByEmail = await service.userFindByEmail(email)
-
+    
 
     // 원래 pw 비교 구문
     if(userByEmail.pw !== getHash(pw, userByEmail.salt)){
-      res.status(400).json({message: `"입력한 정보가 올바르지 않습니다.`})
+      res.status(400).json({message: `입력한 정보가 올바르지 않습니다.`})
     }
 
     // bcrypt를 사용하여 password를 비교하는 구문
@@ -86,24 +85,26 @@ router.post('/signin', async(req, res) => {
     
     // const token = getSalt()
     const expired = getExpiredTime()
-    const token = jwt.sign({ email }, secertKey.secret, {expiresIn: expired})
+    const token = jwt.sign({ email, pw }, secertKey.secret, {expiresIn: 30000})
     
     connectStatus[userByEmail.user_id] = {
       token, expired
     }
    
+    
     res.status(200).json({
-      token, expired , connectStatus
+      token, user_id:userByEmail.user_id, profile:userByEmail.profile
     })
     
   } catch(e){
-    res.status(400).json({e})
+    res.status(400).json({message:"로그인 에러발생"})
   }
 })
 
 // 유저 로그인 확인 미들웨어
 router.use('/:id', (req, res, next) => {
   const { id } = req.params
+  // console.log("토큰 확인 미들웨어 실행");
   if(!id || isNaN(id)){
     res.status(400).json({message: "id 정보가 옳바르지 않습니다."})
   }
@@ -141,6 +142,7 @@ router.use('/:id', (req, res, next) => {
 
 // 유저 상세 조회 API
 router.get('/:id', async(req, res) => {
+  // console.log('유저 상세 조회 API 실행');
   const { id } = req.params
   if(!id || isNaN(id)){
     res.status(400).json({message: "id 정보가 옳바르지 않습니다."})

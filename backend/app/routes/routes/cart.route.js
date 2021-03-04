@@ -24,11 +24,14 @@ router.get('/', async(req, res) => {
   }
 })
 
-// 장바구니 상세 조회 API
+// 유저의 장바구니 조회 API
 router.get('/:id', async(req, res) => {
   const { id } = req.params
   if(!id || isNaN(id)){
-    res.status(400).json({message: "바로구매 id 값이 옳바르지 않습니다."})
+    res.status(400).json({message: "유저 아이디가 올바르지 않습니다."})
+  }
+  const UserCartInfo = {
+    info:{}
   }
 
   try{
@@ -36,38 +39,57 @@ router.get('/:id', async(req, res) => {
     if(!cartDetail){
       res.status(400).json({message: "해당 장바구니 정보가 없습니다."})
     }
-    res.status(200).json({cartDetail})
+    UserCartInfo.info = cartDetail
+    res.status(200).json({UserCartInfo})
   } catch(e){
-    res.status(400).json({e})
+    res.status(400).json({message:e})
+    return
   }
-
+  
 })
 
 // 장바구니 등록 API
 router.post('/', async(req, res) => {
-  const { user_cart_id, production_cart_id, option_cart_id, amount, total_price } = req.body
+  console.log("백엔드에서는 요청이 오긴 했습니다.");
+  const { user_cart_id, production_cart_id, option_cart_id, amount } = req.body
+  let price = 0;
 
-  if(!user_cart_id){
+  if(!user_cart_id || isNaN(user_cart_id)){
     res.status(400).json({message: "user_cart_id 값이 없습니다."})
+    return
   }
-  if(!production_cart_id){
+  if(!production_cart_id || isNaN(production_cart_id)){
     res.status(400).json({message: "production_cart_id 값이 없습니다."})
+    return
   }
-  if(!option_cart_id){
+  if(!option_cart_id || isNaN(option_cart_id)){
     res.status(400).json({message: "option_cart_id 값이 없습니다."})
+    return
   }
-  if(!amount){
+  if(!amount || isNaN(amount)){
     res.status(400).json({message: "amount의 값이 없습니다."})
+    return
   }
-  if(!total_price){
-    res.status(400).json({message: "total_price 값이 없습니다."})
+  
+  try{
+    const Id = option_cart_id
+    const sellPrcie = await service.cartFindForPrice(Id)
+    if(!sellPrcie){
+      res.status(400).json("해당 상품의 가격이 없습니다.")
+      return
+    }
+    const { option_sell_price } = sellPrcie[0]
+    price = amount * option_sell_price
+  } catch(e){
+    res.status(400).json({message: "에러 발생!"})
+    return
   }
-
-  const cartDetail = {
-    user_order_id, production_order_id, option_order_id, amount, total_price
-  }
+  
 
   try{
+    cartDetail = {
+      user_cart_id, production_cart_id, option_cart_id, amount
+    }
     await service.cartCreate(cartDetail)
     res.status(200).json({message: "상품 장바구니 요청이 완료되었습니다."})
   } catch(e){

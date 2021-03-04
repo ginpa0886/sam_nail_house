@@ -59,12 +59,20 @@ router.get('/:id', async(req, res) => {
   }
   
   const productionDetail = {
-    production:{},
+    production:{
+      info:{},
+      img:{},
+      userImg:{},
+      review:{},
+      question:{},
+      reviewUsers:{}
+    },
     brand:{},
-    category:{},
+    category:[],
     option:{}
   }
 
+  // 상품 정보만 가져오는 것(기본 정보)
   try{
     const productionById = await service.productionFindById(id)
     if(!productionById){
@@ -78,11 +86,57 @@ router.get('/:id', async(req, res) => {
       categoryId: production_category_id
     }
 
-    productionDetail.production = productionById
+    productionDetail.production.info = productionById
   } catch(e){
     res.status(400).json({e})
   }
 
+  try{
+    const productionImge = await service.productionImageById(id)
+    // console.log(productionImge);
+    if(!productionImge){
+      res.status(400).json({message: "해당 상품의 이미지가 없습니다."})
+    }
+    productionDetail.production.img = productionImge
+  }catch(e){
+    res.status.json({e})
+  }
+
+  // 유저 상품 이미지 등록 데이터
+  try{
+    const userPhoto = await service.userPhotoByProductionId(id)
+    if(!userPhoto){
+      res.status(400).json({message: "유저 포토가 없습니다."})
+    }
+    productionDetail.production.userImg = userPhoto
+  }catch(e){
+    res.status(400).json({e})
+  }
+
+  // 상품 유저 리뷰
+  try{
+    const userReview = await service.ReviewByProductionId(id)
+    productionDetail.production.review = userReview
+  }catch(e){
+    res.status(400).json({e})
+  }
+
+  try{
+    const reviewUserArray = await service.reviewUser(id)
+    productionDetail.production.reviewUsers = reviewUserArray
+  }catch(e){
+    res.status(400).json({e})
+  }
+
+  // 상품 유저 문의 불러오기
+  try{
+    const userQuestion = await service.QuestionByProductionId(id)
+    productionDetail.production.question = userQuestion
+  }catch(e){
+    res.status(400).json({e})
+  }
+
+  // 상품 브랜드 불러오기
   try{
     const { brandId } = foreginKey
     const brandById = await service.brandByProductionId(brandId)
@@ -100,7 +154,8 @@ router.get('/:id', async(req, res) => {
     if(!categoryById){
       res.status(400).json({message: "해당 카테고리가 없습니다."})
     }
-    productionDetail.category = categoryById
+    const { category_main, category_medium, category_small, category_tiny } = categoryById
+    productionDetail.category.push(category_main, category_medium, category_small, category_tiny)
   } catch(e){
     res.status(400).json({e})
   }
