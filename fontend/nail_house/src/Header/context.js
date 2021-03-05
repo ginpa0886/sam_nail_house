@@ -41,6 +41,7 @@ const HeaderContextProvider = ({ children }) => {
 
   // 토큰 유효성 검사하는 곳
   const ChecktheLogined = async(id) => {
+    console.log("로그인 확인 실행됨");
     try{
       const token = localStorage.getItem("token")
       const res = await userApi.UserCheck(id, token);
@@ -52,8 +53,9 @@ const HeaderContextProvider = ({ children }) => {
         return 
       }
     }catch(e){
-      localStorage.removeItem("user_id")
+      localStorage.removeItem("user_id");
       localStorage.removeItem("token");
+      localStorage.removeItem("profile");
       setAfterLogin({...afterLogin, loading:"false"})
       // console.log("유저 정보가 만료되었습니다.");
       return 

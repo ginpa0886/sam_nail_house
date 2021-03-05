@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { CartContext } from './context'
+import Loader from '../../Components/Loader'
 
 const Container = styled.section`
   width:100%;
@@ -53,6 +54,7 @@ const CartContainer = styled.section`
   align-items:center;
   border:1px solid #ededed;
   border-radius:4px;
+  margin-bottom:12px;
 `;
 const Header = styled.div`
   width:100%;
@@ -199,9 +201,45 @@ const FooterContent = styled.div`
 `;
 
 const Cart1 = () => {
-  const { cartInfo, cartInfo:{infoCart}, setCartInfo } = useContext(CartContext)
+  const { cartInfo, cartInfo:{infoCart, loading}, setCartInfo } = useContext(CartContext)
   const cartArray = infoCart;
+  const forBoxCheck = cartArray.map((value, index) => {
+    return index
+  })
+  console.log(forBoxCheck);
   
+  const [removeCart, setRemoveCart] = useState({
+    list:[],
+    removeLoading:false,
+    boxCheck:forBoxCheck
+  })
+
+  // checkBox 이벤트 함수
+  const checkBox = (e) => {
+    const { target: { id }} = e;
+    const removeList = removeCart.list
+    const wantRemove = Number(id)
+    
+
+    if(removeList.includes(wantRemove)){
+      const noRemoveList = removeList.filter(value => {
+        if(value === wantRemove){
+          return
+        }else{
+          return value
+        }
+      })
+      setRemoveCart({...removeCart, list:noRemoveList})
+      return
+    }
+
+    setRemoveCart({...removeCart, list:[...removeCart.list, wantRemove]})
+  }
+  
+  const removeItem = () => {
+
+  }
+
   return (
     <Container>
       <ChooseSection>
@@ -211,39 +249,47 @@ const Cart1 = () => {
         </FlexDiv>
         <Remove>선택삭제</Remove>
       </ChooseSection>
-      <CartContainer>
-        <Header>
-          <HeaderContent>가쯔 배송</HeaderContent>
-        </Header>
-        <Body>
-          <BodyButton></BodyButton>
-          <BodyOne>
-            <BodyImg src={require('../../Asset/userIcon/userIcon.jpg').default} />
-            <OneCon>
-              <OneName>[가쯔] 캠핑 접이식 원목 롤테이블...</OneName>
-              <OneDeli>무료배송 | 일반택배</OneDeli>
-            </OneCon>
-          </BodyOne>
-          <BodyTwo>
-            <TwoName>롤테이블 M</TwoName>
-            <TwoCon>
-              <TwoCount>1</TwoCount>
-              <SmallTotal>54900원</SmallTotal>
-            </TwoCon>
-          </BodyTwo>
-          <BodySam>
-            <SamCon>
-              <Option>옵션변경</Option>
-              <Option>|</Option>
-              <Option>바로구매</Option>
-            </SamCon>
-            <Total>54900원</Total>
-          </BodySam>
-        </Body>
-        <Footer>
-          <FooterContent>배송비 무료</FooterContent>
-        </Footer>
-      </CartContainer>
+      {loading === false ? <Loader /> : cartArray.map((value, index) => {
+
+        return (
+          <>
+            <CartContainer>
+              <Header>
+                <HeaderContent>{value.brand}</HeaderContent>
+              </Header>
+              <Body>
+                <BodyButton onClick={checkBox} id={index} ></BodyButton>
+                <BodyOne>
+                  <BodyImg src={require('../../Asset/userIcon/userIcon.jpg').default} />
+                  <OneCon>
+                    <OneName>[{value.brand}] {value.name}</OneName>
+                    <OneDeli>{value.free === 1 ? "무료배송" : "유료배송"} | {value.type}</OneDeli>
+                  </OneCon>
+                </BodyOne>
+                <BodyTwo>
+                  <TwoName>{value.option_name}</TwoName>
+                  <TwoCon>
+                    <TwoCount>1</TwoCount>
+                    <SmallTotal>{value.option_sell_price}원</SmallTotal>
+                  </TwoCon>
+                </BodyTwo>
+                <BodySam>
+                  <SamCon>
+                    <Option>옵션변경</Option>
+                    <Option>|</Option>
+                    <Option>바로구매</Option>
+                  </SamCon>
+                  <Total>54900원</Total>
+                </BodySam>
+              </Body>
+              <Footer>
+                <FooterContent>배송비 무료</FooterContent>
+              </Footer>
+            </CartContainer>
+          </>
+      )
+      })}
+      
     </Container>
   )
 }

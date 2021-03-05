@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import Cart1 from './Cart1'
+import Cart2 from './Cart2'
 import { CartContext } from './context'
 import { userApi } from '../../api'
 
@@ -15,12 +16,13 @@ const Row = styled.div``;
 const Col = styled.div``;
 
 const CartContainer = () => {
-  const {cartInfo, cartInfo:{info, loading}, setCartInfo, GetCartInfomation} = useContext(CartContext)
+  const {cartInfo, cartInfo:{infoCart, loading}, setCartInfo, GetCartInfomation} = useContext(CartContext)
 
   if(loading === false){
     const userId = localStorage.getItem("user_id")
     GetCartInfomation(userId)
   }
+  
 
   return (
     <Background>
@@ -30,6 +32,7 @@ const CartContainer = () => {
             <Cart1 />
           </Col>
           <Col className="col-4">
+            <Cart2 />
           </Col>
         </Row>
       </Container>

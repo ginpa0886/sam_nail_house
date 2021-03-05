@@ -7,7 +7,8 @@ const CartContextProvider = ({children}) => {
 
   const [cartInfo, setCartInfo] = useState({
     infoCart:{},
-    loading:false
+    loading:false,
+    
   })
 
   const GetCartInfomation = async(id) => {
