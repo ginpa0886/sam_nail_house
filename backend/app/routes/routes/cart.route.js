@@ -36,13 +36,15 @@ router.get('/:id', async(req, res) => {
 
   try{
     const cartDetail = await service.cartFindById(id)
+    
     if(!cartDetail){
       res.status(400).json({message: "해당 장바구니 정보가 없습니다."})
+      return
     }
     UserCartInfo.info = cartDetail
     res.status(200).json({UserCartInfo})
   } catch(e){
-    res.status(400).json({message:e})
+    res.status(401).json({message:e})
     return
   }
   
@@ -94,6 +96,16 @@ router.post('/', async(req, res) => {
     res.status(200).json({message: "상품 장바구니 요청이 완료되었습니다."})
   } catch(e){
     res.status(400).json({e})
+  }
+})
+
+router.delete('/:id', async(req, res) => {
+
+
+  try{
+
+  }catch(e){
+    res.status(400).json({message:"카트 상품 삭제 요청에 오류가 발생하였습니다."})
   }
 })
 

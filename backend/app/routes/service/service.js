@@ -341,6 +341,7 @@ const cartFindById = (id) => {
       .innerJoin(Option, "option_cart_id", "option_id")
       .innerJoin(Brand, "brand_id", "production_cart_id")
       .where('user_cart_id', typeId)
+      
 }
 
 // 장바구니 total 가격 확인
