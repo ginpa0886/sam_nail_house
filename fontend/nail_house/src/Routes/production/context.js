@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { productionApi } from '../../api'
 
 export const ProductionContext = React.createContext()
@@ -52,10 +52,14 @@ const ProductionContextProvider = ({ children }) => {
   const [test, setTest] = useState({
     reviewDisplay:false
   });
+
+  const [questionPage, setQuestionPage] = useState({
+    questionDisplay:false
+  })
   
   
   return (
-    <ProductionContext.Provider value={{detail, setDetail, getProductionInfo, cart, setCart, test, setTest}}>
+    <ProductionContext.Provider value={{detail, setDetail, getProductionInfo, cart, setCart, test, setTest, questionPage, setQuestionPage}}>
       {children}
     </ProductionContext.Provider>
   )

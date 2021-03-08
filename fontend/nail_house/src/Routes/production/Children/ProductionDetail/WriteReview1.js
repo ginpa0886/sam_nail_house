@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
+import '../../../../Asset/icomoon/style.css'
+import { productionApi } from '../../../../api'
 
 const Background = styled.section`
   /* display:block; */
@@ -26,6 +28,7 @@ const Form = styled.form`
   padding:40px;
   background-color:white;
   border-radius:4px 4px 0 0;
+  position: relative;
 `;
 
 const Hedaer = styled.div`
@@ -145,7 +148,7 @@ const PhotoSub = styled.div`
   line-height:1;
 `;
 
-const PhotoButton = styled.button`
+const PhotoInput = styled.input`
   background-color:white;
   border:1px solid #35c5f0;
   border-radius:4px;
@@ -220,29 +223,49 @@ const FooterRed = styled.span`
   color:#f06060;
 `;
 
-
+const CloseIcon = styled.div`
+  font-size:30px;
+  position:absolute;
+  top:10px;
+  right:10px;
+  &:hover{
+    cursor: pointer;
+  }
+`
  
 
 const WriteReview1 = () => {
-  const { detail, detail :{ productioninfo }, test} = useContext(ProductionContext)
+  const { detail, detail :{ productioninfo }, test, test:{reviewDisplay},  setTest} = useContext(ProductionContext)
   const productionInfo = productioninfo;
 
   const brandName = productionInfo.brand.brand;
   const productName = productionInfo.production.info.name;
   const ProductImg = productionInfo.production.img[0].img_path;
 
-  const starOnDisplay = false;
+  const starOnDisplay = test.reviewDisplay;
   
-  
-  console.log(test);
+  const whenSubmit = (e) => {
+    e.preventDefault();
+    // try{
+    //   const res = await productionApi.WriteReview()
+    //   console.log(res);
+    // }catch(e){
+    //   console.log("에러발생!");
+    // }
+    console.log(e);
+  }
+  const DDD = (e) => {
+    console.log(e);
+  }
   
   return (
     <>
       <Background forDisplay={starOnDisplay}>
         <Container>
-          <Form>
+          <Form action="/upload" method="post" encType="multipart/form-data" onSubmit={whenSubmit}>
             <Hedaer>리뷰 쓰기</Hedaer>
             <Point>포토리뷰<Blue>250P</Blue>, 일반리뷰<Gray>0P</Gray></Point>
+            <CloseIcon className="icon-Close" onClick={()  => setTest({...test, reviewDisplay:false})}></CloseIcon>
             <ProductionContent>
               <ProductionImg src={ProductImg}></ProductionImg>
               <ProductionNameContainer>
@@ -276,11 +299,11 @@ const WriteReview1 = () => {
             <CommonContainer>
               <CommonHeader>사진 첨부(선택)</CommonHeader>
               <PhotoSub>사진을 첨부해주세요. (최대 1장)</PhotoSub>
-              <PhotoButton>사진 첨부하기</PhotoButton>
+              <PhotoInput type="file" name="image"  />
             </CommonContainer>
             <CommonContainer>
               <CommonHeader>리뷰 작성</CommonHeader>
-              <ReviewInput placeholder="자세하고 솔직한 리뷰는 다른 고객에게 큰 도움이 됩니다. (최소 20자이상)" />
+              <ReviewInput placeholder="자세하고 솔직한 리뷰는 다른 고객에게 큰 도움이 됩니다. (최소 20자이상)" type="text" name="title" />
             </CommonContainer>
             <CommonContainer>
               <CommonHeader>상품을 직접 사용하고 작성한 리뷰인가요?</CommonHeader>
@@ -289,7 +312,7 @@ const WriteReview1 = () => {
                 <CheckWord>네, 상품을 직접 사용한 후 작성한 리뷰이며, 오늘의집 리뷰 정책에 동의합니다.</CheckWord>
               </CheckBody>
             </CommonContainer>
-            <CompleteButton>완료</CompleteButton>
+            <CompleteButton type="submit" onClick={DDD}>완료</CompleteButton>
           </Form>
           <Footer>
             <FooterWord>- 비구매 상품 리뷰 포인트는 심사 후 지급됩니다.(영업일 기준 2~3일 소요)</FooterWord>

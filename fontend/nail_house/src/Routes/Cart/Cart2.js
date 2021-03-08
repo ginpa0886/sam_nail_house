@@ -74,7 +74,15 @@ const ButtonSection = styled.div`
 `;
 const Cart2 = () => {
   const {cartInfo, cartInfo: { infoCart, loading }, setCartInfo} = useContext(CartContext)
-  const cartArray = infoCart
+  let cartArray = []
+
+  if(loading){
+    cartArray = infoCart.filter(v => {
+      if(v.enabled !== 0 ){
+        return v
+      }
+    })
+  }
 
   // 상품 카트 모달에 들어갈 변수들 ( 상품원가격합산, 세일한 가격합산, 최종가격합산 )
   let totalOriginal = 0;

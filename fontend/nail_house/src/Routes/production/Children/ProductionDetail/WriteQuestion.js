@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
+import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoon/style.css'
 
 const Container = styled.section`
@@ -10,7 +11,7 @@ const Container = styled.section`
   top:0;
   left:0;
   z-index:10000;
-  /* display:none; */
+  display:${props => props.bgDisplay === true ? "block" : "none"};
 `;
 
 const Box = styled.div`
@@ -169,19 +170,27 @@ const CloseIcon = styled.div`
   }
 `;
 
+const Div = styled.div``;
+
 const WriteQuestion = () => {
+  const {questionPage, questionPage:{ questionDisplay }, setQuestionPage} = useContext(ProductionContext)
+
+  const typeCheck = (e) => {
+    const { target: { innerText }} = e;
+    console.log(innerText);
+  }
 
   return (
-    <Container>
+    <Container bgDisplay={questionPage.questionDisplay}>
       <Box>
         <Header>상품 문의하기
-          <CloseIcon className="icon-Close"></CloseIcon>
+          <CloseIcon className="icon-Close" onClick={() => setQuestionPage({...questionPage, questionDisplay:false})}></CloseIcon>
         </Header>
         <SubCon>
           <Sub>문의유형</Sub>
           <TypeCon>
             <TypeDiv>
-              <Type>상품</Type>
+              <Type onClick={typeCheck}>상품</Type>
               <Type>배송</Type>
               <Type>반품</Type>
             </TypeDiv>

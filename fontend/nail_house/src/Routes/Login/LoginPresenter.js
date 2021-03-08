@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import UseInput from '../../Components/UseInput'
 import UseButton from '../../Components/UseButton'
 import { LoginContext } from './context'
@@ -151,11 +151,13 @@ const Footer = styled.footer`
 const FooterSpan = styled.span``;
 
 const GotoSginin = styled(Link)`
-
+  width:100%;
+  height:100%;
+  display:block;
 `;
 
 
-const LoginPresenter = () => {
+const LoginPresenter = (props) => {
   const {email, setEmail, pw, setPw, email:{ inputEmail, checkWrite }, pw:{ inputPw, checkPw }, postUserLogin} =useContext(LoginContext)
   let checkLogin = false;
 
@@ -179,6 +181,8 @@ const LoginPresenter = () => {
   }
 
   const LoginSubmit = (e) => {
+    e.preventDefault();
+    
     const {target: { children }} = e;
     const userEmail = children[1].value;
     const userPw = children[2].value;
@@ -188,6 +192,7 @@ const LoginPresenter = () => {
     }
 
     if(checkLogin === true){
+      props.history.push("/")
       postUserLogin(userEmail, userPw)
     }
   }
@@ -205,7 +210,7 @@ const LoginPresenter = () => {
               <Button type="submit">로그인</Button>
               <Two>
                 <TwoItem>비밀번호 재설정</TwoItem>
-                <TwoItem><GotoSginin to="/signin">회원가입</GotoSginin></TwoItem>
+                <TwoItem>회원가입</TwoItem>
               </Two>
               <SnsContent>Sns계정으로 간편 로그인/회원가입</SnsContent>
               <SnsContainer>
@@ -226,4 +231,4 @@ const LoginPresenter = () => {
   )
 }
 
-export default LoginPresenter
+export default withRouter(LoginPresenter)

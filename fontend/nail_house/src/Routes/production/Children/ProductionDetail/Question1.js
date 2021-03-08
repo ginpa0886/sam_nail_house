@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoonReal/style.css'
+import WriteQuestion from './WriteQuestion'
 
 const Container = styled.section`
   margin-bottom:80px;
@@ -48,6 +49,10 @@ const WriteButton = styled.button`
   font-weight:700;
   border:none;
   background-color:white;
+
+  &:hover{
+    cursor: pointer;
+  }
 `;
 
 const Body = styled.section`
@@ -129,19 +134,22 @@ const SecretText = styled.div`
 
 
 const Question1 = () => {
-  const { detail : { productioninfo :{ production: { question }} }} = useContext(ProductionContext)
+  const { detail : { productioninfo :{ production: { question }} }, questionPage, questionPage : {questionDisplay}, setQuestionPage} = useContext(ProductionContext)
   const userQuestionArray = question
   const totalQuestion = userQuestionArray.length
 
+  const openQuestion = () => {
+    setQuestionPage({...questionPage, questionDisplay:true})
+  }
+
   return (
-    <>
       <Container>
         <Header>
           <DivHeader>
             <Word>문의</Word>
             <Number>{totalQuestion}</Number>
           </DivHeader>
-          <WriteButton>문의하기</WriteButton>
+          <WriteButton onClick={openQuestion}>문의하기</WriteButton>
         </Header>
         <Body>
           {userQuestionArray.map((value, index) => {
@@ -185,8 +193,8 @@ const Question1 = () => {
             )
           })}
         </Body>
+        <WriteQuestion />
       </Container>
-    </>
   )
 }
 

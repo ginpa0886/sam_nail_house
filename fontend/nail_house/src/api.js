@@ -25,6 +25,12 @@ export const productionApi = {
       production_order_id,
       option_order_id,
       amount
+    }),
+    WriteReview: () => api.post('production_reviews/', {
+
+    }),
+    reviewGood: (inReviewId, inGood) => api.patch(`production_reviews/good`, {
+      inReviewId, inGood
     })
 }
 
@@ -38,6 +44,10 @@ export const userApi = {
     UserCheck: (id, token) => api.get(`user/${id}`, {
       headers: {'_token_': token}
     }),
-    UserCart: (id) => api.get(`cart/${id}`)
+    UserCart: (id) => api.get(`cart/${id}`),
+    UserCartRemove: (id, removeArray) => api.delete(`cart/${id}`, {params: {
+      removeArray
+    }}),
+    UserWriteReview : (id) => api.post(``)
 }
 

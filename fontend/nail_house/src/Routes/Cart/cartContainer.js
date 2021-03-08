@@ -7,7 +7,7 @@ import { userApi } from '../../api'
 
 const Background = styled.div`
   width:100%;
-  height:100vh;
+  height:100%;
   z-index:-1000;
   background-color:rgb(245, 245, 245);
 `;

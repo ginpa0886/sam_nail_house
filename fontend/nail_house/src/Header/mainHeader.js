@@ -14,6 +14,7 @@ const Headers = styled.header`
   left:0;
   z-index:1000;
   width:100%;
+  
 `;
 
 

@@ -146,7 +146,7 @@ const SoreColor = styled.div`
 
 // 리뷰
 const Review1 = () => {
-  const { detail : { productioninfo :{ production: { review }}}} = useContext(ProductionContext)
+  const { detail : { productioninfo :{ production: { review }}}, test, setTest} = useContext(ProductionContext)
   const userReivewArray = review
   const totalReviewCount = userReivewArray.length
   let sumRating = 0
@@ -181,8 +181,7 @@ const Review1 = () => {
 
   // 리뷰쓰기 페이지 관련 함수
   const writeReivewFnc = () => {
-    console.log("실행됨");
-    // setWrite({...write, reviewDisplay:true})
+    setTest({...test, reviewDisplay:true})
   }
 
 

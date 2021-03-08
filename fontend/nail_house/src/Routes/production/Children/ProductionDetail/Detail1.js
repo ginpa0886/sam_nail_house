@@ -113,7 +113,7 @@ const Detail1 = () => {
  
   const NextFnc = () => {
     displayFor = true
-    setTimeout(() => {
+    
       const newIndex = check.index.map((value) => value + 1)
     if(check.index[0] === -1){
       const initialIndex = [0, 1, 2]
@@ -130,7 +130,7 @@ const Detail1 = () => {
     }
     const newArray = [userImgArray[newIndex[0]], userImgArray[newIndex[1]], userImgArray[newIndex[2]]]
     setCheck({...check, index:newIndex, Array:newArray, twodisplay:true})
-    }, 1000);
+    
   }
 
   const PreviousFnc = () => {

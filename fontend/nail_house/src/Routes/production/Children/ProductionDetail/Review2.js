@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
+import { productionApi } from '../../../../api'
 
 const Container = styled.div`
   padding:0 30px 40px 30px;
@@ -70,6 +71,14 @@ const Good = styled.button`
   letter-spacing:-0.01em;
   font-weight:700;
   margin-right:8px;
+  transition:background-color 0.35s ease,
+              color 0.35s ease;
+
+  &:hover{
+    cursor: pointer;
+    background-color:#3DA8F5;
+    color:white;
+  }
 `;
 const Help = styled.div`
   font-size:12px;
@@ -85,6 +94,23 @@ const Review2 = (index) => {
   const { detail : { productioninfo :{ production: { reviewUsers }} }} = useContext(ProductionContext)
   const reviewUserArray = reviewUsers
   
+  // console.log(reviewUserArray);
+
+  const sendGood = async(reviewId, good) => {
+    const inReviewId = reviewId;
+    const inGood = good;
+
+    try{
+      const res = await productionApi.reviewGood(inReviewId, inGood)
+      if(!res){
+        console.log("백엔드에서 반응이 없습니다.");
+        return
+      }
+      console.log(res);
+    }catch(e){
+      console.log("오류발생!");
+    }
+  }
 
   return (
     <>
@@ -111,7 +137,7 @@ const Review2 = (index) => {
             </Div>
             <Div>
               <Footer>
-                <Good>도움이 돼요</Good>
+                <Good onClick={() => sendGood(value.review_id, value.good)}>도움이 돼요</Good>
                 <Help><How>{value.good}</How>명에게 도움이 되었습니다.</Help>
               </Footer>
             </Div>
