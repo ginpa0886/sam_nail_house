@@ -223,6 +223,7 @@ const Dropbox = styled.div`
   width:100%;
   background-color:white;
   position: absolute;
+  display:${props => props.bgDisplay === true ? "block" : "none"};
 `;
 const Number = styled.div`
   width:100%;
@@ -236,14 +237,16 @@ const Number = styled.div`
 const Cart1 = ({ history }) => {
   const { cartInfo, cartInfo:{infoCart, loading}, setCartInfo } = useContext(CartContext)
   let cartArray = [];
+  let displayArray = []
   const UserId = localStorage.getItem("user_id")
-  console.log(infoCart);
+  // console.log(infoCart);
   if(loading){
     cartArray = infoCart.filter(v => {
       if(v.enabled !== 0 ){
         return v
       }
     })
+    displayArray = cartArray.map(v => false)
   }
   
   
@@ -251,7 +254,9 @@ const Cart1 = ({ history }) => {
   const [removeCart, setRemoveCart] = useState({
     list:[],
     allcheck:false,
-    
+    display:[],
+    loading:false,
+    forDrop:[]
   })
 
   // checkBox 이벤트 함수
@@ -295,6 +300,7 @@ const Cart1 = ({ history }) => {
 
     try{
       await userApi.UserCartRemove(inId, intestArray)
+      window.location.replace('/mycart')
       setCartInfo({...cartInfo})
     }catch(e){
       console.log("문제발생...");
@@ -313,6 +319,23 @@ const Cart1 = ({ history }) => {
       return
     }
   }
+
+  // 상품 숫자 카운트 드롭박스
+  const dropBox = (index) => {
+    const typeIndex = index
+    if(removeCart.forDrop.includes(typeIndex) === false){
+      setRemoveCart({...removeCart, forDrop:[...removeCart.forDrop, typeIndex]})
+    }else{
+      const pushArray = removeCart.forDrop.filter(v => {
+        if(v === typeIndex){
+          return
+        }
+        return v
+      })
+      setRemoveCart({...removeCart, forDrop:pushArray})
+    }
+  }
+
   
 
   return (
@@ -325,7 +348,8 @@ const Cart1 = ({ history }) => {
         <Remove onClick={() => removeItem(UserId, removeCart.list)}><SLink to="/mycart" onClick={() => history.push('/mycart')}>선택삭제</SLink></Remove>
       </ChooseSection>
       {loading === false ? <Loader /> : cartArray.map((value, index) => {
-        const typeIndex = removeCart.list.includes(value.cart_id) === true ? true : false
+        const typeIndex = removeCart.list.includes(value.cart_id) === true ? true : false;
+        const dropIndex = removeCart.forDrop.includes(index) === true ? true : false;
         // Cart테이블에서 enabled가 1인 데이터들만 보이게 처리
         if(value.enabled === 1){
           return (
@@ -345,9 +369,9 @@ const Cart1 = ({ history }) => {
                   </BodyOne>
                   <BodyTwo>
                     <TwoName>{value.option_name}</TwoName>
-                    <TwoCon>
+                    <TwoCon onClick={() => dropBox(index)}>
                       <TwoCount>1
-                        <Dropbox>
+                        <Dropbox bgDisplay={dropIndex}>
                           <Number>1</Number>
                           <Number>2</Number>
                           <Number>3</Number>
