@@ -29,14 +29,21 @@ const CartContextProvider = ({children}) => {
       return
     } 
   }
-
+  // 카트 페이지에서 숫자 조절할 수 있게 해주는 state
   const [forBuy, setForBuy] = useState({
     count:[],
     loading:true
   })
 
+  // cart page controll state
+  const [page, setPage] = useState({
+    page:1,
+    pageSize:5,
+    canShow:[]
+  })
+
   return (
-    <CartContext.Provider value={{cartInfo, setCartInfo, GetCartInfomation, forBuy, setForBuy}}>
+    <CartContext.Provider value={{cartInfo, setCartInfo, GetCartInfomation, forBuy, setForBuy, page, setPage}}>
       {children}
     </CartContext.Provider>
   )

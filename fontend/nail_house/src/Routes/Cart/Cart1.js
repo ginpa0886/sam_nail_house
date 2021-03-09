@@ -219,7 +219,9 @@ const SLink = styled(Link)`
   width:100%;
 `;
 
-const Div = styled.div``
+const Div = styled.div`
+  display:${props => props.forPage === true ? "block" : "none"};
+`;
 
 const Dropbox = styled.div`
   width:100%;
@@ -243,7 +245,7 @@ const IconCheovn = styled.div`
 `;
 
 const Cart1 = ({ history }) => {
-  const { cartInfo, cartInfo:{infoCart, loading}, setCartInfo, forBuy, forBuy:{count}, setForBuy} = useContext(CartContext)
+  const { cartInfo, cartInfo:{infoCart, loading}, setCartInfo, forBuy, forBuy:{count}, setForBuy, page, page:{canShow}, setPage} = useContext(CartContext)
   let cartArray = [];
   let displayArray = []
   const UserId = localStorage.getItem("user_id")
@@ -361,6 +363,24 @@ const Cart1 = ({ history }) => {
     pushArray[id] = typeInnerText
     setForBuy({...forBuy, count:pushArray})
   }
+
+ 
+  const test = true
+
+  // const pageFnc = (index) => {
+  //   const tyepIndex = index
+
+  //   if(Math.floor(tyepIndex / page.pageSize) + 1 === page.page){
+  //     setPage({...page, canShow:[...page.canShow, typeIndex]})
+  //   }else{
+  //     const pushArray = page.canShow.filter(v => {
+  //       if(v === typeIndex){
+  //         return
+  //       }
+  //       return v
+  //     })
+  //   }
+  // }
   
 
   return (
@@ -379,13 +399,13 @@ const Cart1 = ({ history }) => {
         const dropIndex = removeCart.forDrop.includes(index) === true ? true : false;
         // dropbox에서 눌린 숫자 * 원래의 값
         const numAndprice = +forBuy.count[index] * +value.option_sell_price;
-        
+        // page에 따른 index값
+        const pageIndex = Math.floor(index / page.pageSize) === (page.page - 1) ? true : false;
+
         // Cart테이블에서 enabled가 1인 데이터들만 보이게 처리
-
-
         if(value.enabled === 1){
           return (
-            <Div key={index}>
+            <Div key={index} forPage={pageIndex}>
               <CartContainer>
                 <Header>
                   <HeaderContent>{value.brand}</HeaderContent>
