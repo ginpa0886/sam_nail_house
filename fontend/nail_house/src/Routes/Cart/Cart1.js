@@ -4,6 +4,7 @@ import { CartContext } from './context'
 import Loader from '../../Components/Loader'
 import { userApi } from '../../api'
 import { Link, withRouter } from 'react-router-dom'
+import '../../Asset/icomoon/style.css'
 
 const Container = styled.section`
   width:100%;
@@ -164,6 +165,7 @@ const TwoCount = styled.div`
   height:24px;
   background-color:white;
   position: relative;
+  padding:2px 10px;
 `;
 const SmallTotal = styled.div`
   font-size: 15px;
@@ -233,21 +235,35 @@ const Number = styled.div`
   }
 `;
 
+const IconCheovn = styled.div`
+  position:absolute;
+  top:5px;
+  right:10px;
+  font-size:17px;
+`;
 
 const Cart1 = ({ history }) => {
-  const { cartInfo, cartInfo:{infoCart, loading}, setCartInfo } = useContext(CartContext)
+  const { cartInfo, cartInfo:{infoCart, loading}, setCartInfo, forBuy, forBuy:{count}, setForBuy} = useContext(CartContext)
   let cartArray = [];
   let displayArray = []
   const UserId = localStorage.getItem("user_id")
   // console.log(infoCart);
+
+  // 카트정보에 대한 정보가 받아져 오면 실행되는 로직( 해당 유저의 카트정보를 받아오는데 그중에 enabled가 1인 것만 받아오는 것)
   if(loading){
     cartArray = infoCart.filter(v => {
       if(v.enabled !== 0 ){
         return v
       }
     })
-    displayArray = cartArray.map(v => false)
   }
+
+  // 처음 카트 목록을 가져왔을 때만 실행이 되는 부분
+  if(cartInfo.loading && forBuy.loading === true){
+    displayArray = cartArray.map(v => 1)
+    setForBuy({...forBuy, count:displayArray, loading:false})
+  }
+  // console.log(forBuy);
   
   
   // local State ( 삭제될 상품들이 데이터가 담기는 곳 )
@@ -336,6 +352,15 @@ const Cart1 = ({ history }) => {
     }
   }
 
+  // dropBox에서 눌린 숫자들에 대한 상품 숫자 조절 함수
+  const numFnc = (e) => {
+    const { target: { innerText, parentElement:{ id } }} = e;
+    const typeInnerText = +innerText
+
+    const pushArray = forBuy.count
+    pushArray[id] = typeInnerText
+    setForBuy({...forBuy, count:pushArray})
+  }
   
 
   return (
@@ -348,9 +373,16 @@ const Cart1 = ({ history }) => {
         <Remove onClick={() => removeItem(UserId, removeCart.list)}><SLink to="/mycart" onClick={() => history.push('/mycart')}>선택삭제</SLink></Remove>
       </ChooseSection>
       {loading === false ? <Loader /> : cartArray.map((value, index) => {
+        // 해당 상품 버튼이 눌렸는지에 대한 index
         const typeIndex = removeCart.list.includes(value.cart_id) === true ? true : false;
+        // dropbox관련 index
         const dropIndex = removeCart.forDrop.includes(index) === true ? true : false;
+        // dropbox에서 눌린 숫자 * 원래의 값
+        const numAndprice = +forBuy.count[index] * +value.option_sell_price;
+        
         // Cart테이블에서 enabled가 1인 데이터들만 보이게 처리
+
+
         if(value.enabled === 1){
           return (
             <Div key={index}>
@@ -369,21 +401,22 @@ const Cart1 = ({ history }) => {
                   </BodyOne>
                   <BodyTwo>
                     <TwoName>{value.option_name}</TwoName>
-                    <TwoCon onClick={() => dropBox(index)}>
-                      <TwoCount>1
-                        <Dropbox bgDisplay={dropIndex}>
-                          <Number>1</Number>
-                          <Number>2</Number>
-                          <Number>3</Number>
-                          <Number>4</Number>
-                          <Number>5</Number>
-                          <Number>6</Number>
-                          <Number>7</Number>
-                          <Number>8</Number>
-                          <Number>9</Number>
+                    <TwoCon>
+                      <TwoCount onClick={() => dropBox(index)}>{forBuy.count[index]}
+                        <IconCheovn className="icon-Chevron"></IconCheovn>
+                        <Dropbox bgDisplay={dropIndex} id={index}>
+                          <Number onClick={numFnc}>1</Number>
+                          <Number onClick={numFnc}>2</Number>
+                          <Number onClick={numFnc}>3</Number>
+                          <Number onClick={numFnc}>4</Number>
+                          <Number onClick={numFnc}>5</Number>
+                          <Number onClick={numFnc}>6</Number>
+                          <Number onClick={numFnc}>7</Number>
+                          <Number onClick={numFnc}>8</Number>
+                          <Number onClick={numFnc}>9</Number>
                         </Dropbox>
                       </TwoCount>
-                      <SmallTotal>{value.option_sell_price}원</SmallTotal>
+                      <SmallTotal>{numAndprice}원</SmallTotal>
                     </TwoCon>
                   </BodyTwo>
                   <BodySam>
@@ -392,7 +425,7 @@ const Cart1 = ({ history }) => {
                       <Option>|</Option>
                       <Option>바로구매</Option>
                     </SamCon>
-                    <Total>54900원</Total>
+                    <Total>{numAndprice}원</Total>
                   </BodySam>
                 </Body>
                 <Footer>

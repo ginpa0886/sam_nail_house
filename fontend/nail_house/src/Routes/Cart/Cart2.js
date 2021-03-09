@@ -73,9 +73,10 @@ const ButtonSection = styled.div`
   align-items:center;
 `;
 const Cart2 = () => {
-  const {cartInfo, cartInfo: { infoCart, loading }, setCartInfo} = useContext(CartContext)
+  const {cartInfo, cartInfo: { infoCart, loading }, setCartInfo, forBuy} = useContext(CartContext)
   let cartArray = []
 
+  
   if(loading){
     cartArray = infoCart.filter(v => {
       if(v.enabled !== 0 ){
@@ -83,6 +84,7 @@ const Cart2 = () => {
       }
     })
   }
+  // console.log(cartArray);
 
   // 상품 카트 모달에 들어갈 변수들 ( 상품원가격합산, 세일한 가격합산, 최종가격합산 )
   let totalOriginal = 0;
@@ -93,11 +95,13 @@ const Cart2 = () => {
   const productCount = cartArray.length;
 
   if(loading === true){
-    cartArray.map((value) => totalOriginal += value.original_price);
-    cartArray.map((value) => totalPrice += value.option_sell_price);
+    cartArray.map((value, index) => totalOriginal += value.original_price * forBuy.count[index]);
+    cartArray.map((value, index) => totalPrice += value.option_sell_price * forBuy.count[index]);
     cartArray.map((value) => deliveryFee += value.fee);
-    salePrice = totalPrice - totalOriginal +deliveryFee;
+    salePrice = totalPrice - totalOriginal;
   }
+
+  
 
   return (
     <>
@@ -118,7 +122,7 @@ const Cart2 = () => {
           </PriceCon>
           <Total>
             <TotalWord>결제금액</TotalWord>
-            <TotalPrice>{totalPrice}원</TotalPrice>
+            <TotalPrice>{totalPrice + deliveryFee}원</TotalPrice>
           </Total>
         </Header>
         <ButtonSection>

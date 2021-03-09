@@ -30,8 +30,13 @@ const CartContextProvider = ({children}) => {
     } 
   }
 
+  const [forBuy, setForBuy] = useState({
+    count:[],
+    loading:true
+  })
+
   return (
-    <CartContext.Provider value={{cartInfo, setCartInfo, GetCartInfomation}}>
+    <CartContext.Provider value={{cartInfo, setCartInfo, GetCartInfomation, forBuy, setForBuy}}>
       {children}
     </CartContext.Provider>
   )
