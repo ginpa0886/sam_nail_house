@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoonReal/style.css'
@@ -60,6 +60,7 @@ const Body = styled.section`
 
 const BodyContainer = styled.article`
   margin-bottom:40px;
+  display:${props => props.forPage === true ? "block" : "none"};
 `;
 
 const BodyHeader = styled.div`
@@ -132,14 +133,60 @@ const SecretText = styled.div`
   color:rgba(63, 65, 80, 1);
 `;
 
+const Button = styled.button`
+  width:50px;
+  height:50px;
+  border:1px solid #35c5f0;
+  background-color:${props => props.forColor === true ? "#35c5f0" : "white"};
+  color:${props => props.forColor === true ? "white" : "#35c5f0"};
+  font-size:22px;
+  font-weight:700;
+  border-radius:4px;
+  margin-right:15px;
+
+  &:last-child{
+    margin-right:0;
+  }
+
+  &:focus{
+    outline:none;
+  }
+`;
+const ButtonDiv = styled.div`
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:40px;
+`;
+
 
 const Question1 = () => {
   const { detail : { productioninfo :{ production: { question }} }, questionPage, questionPage : {questionDisplay}, setQuestionPage} = useContext(ProductionContext)
   const userQuestionArray = question
   const totalQuestion = userQuestionArray.length
+  const howManyButton = Math.floor(userQuestionArray.length / 5) + 1
+  const repeatButton = userQuestionArray.filter((value, index) => {
+    if(index <= howManyButton){
+      return index
+    }else{
+      return
+    }
+  })
+
+  const [page, setPage] = useState({
+    page:1,
+    pageSize:5
+  })
 
   const openQuestion = () => {
     setQuestionPage({...questionPage, questionDisplay:true})
+  }
+
+  const chagnePage = (e) => {
+    const {target:{innerText}} = e;
+    const typeInnerText = +innerText
+    setPage({...page, page:typeInnerText})
   }
 
   return (
@@ -156,10 +203,13 @@ const Question1 = () => {
             const nick = value.nickname.split('')
             const starNick = nick.slice(0, Math.floor(nick.length/2));
             nick.slice(Math.floor(nick.length/2), nick.length).map(value => starNick.push('*'));
-            const resutNick = starNick.join('')
-            
+            const resutNick = starNick.join('');
+
+            // page에 따른 display 값 변동을 위한 검사 변수
+            const checkPage = Math.floor(index / page.pageSize) + 1 === page.page ? true : false;
+
             return (
-                <BodyContainer key={index}>
+                <BodyContainer key={index} forPage={checkPage}>
                   <BodyHeader>
                     <Type>
                       <TypeItem>{value.type} | </TypeItem>
@@ -193,6 +243,16 @@ const Question1 = () => {
             )
           })}
         </Body>
+        <ButtonDiv>
+          {repeatButton.map((value, index) => {
+            const color = page.page === (index + 1) ? true : false;
+            
+            return (
+              <Button key={index} onClick={chagnePage} forColor={color}>{index + 1}</Button>
+            )
+            
+          })}
+        </ButtonDiv>
         <WriteQuestion />
       </Container>
   )

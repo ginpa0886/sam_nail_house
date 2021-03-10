@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
 import { productionApi } from '../../../../api'
@@ -7,7 +7,7 @@ const Container = styled.div`
   padding:0 30px 40px 30px;
   margin-bottom:40px;
   border-bottom:1px solid #E0E2E7;
-
+  display:${props => props.forPage === true ? "block" : "none"};
   &:last-child{
     border-bottom:none;
   }
@@ -89,11 +89,45 @@ const How = styled.span`
   font-weight:700;
 `;
 
+const Button = styled.button`
+  width:50px;
+  height:50px;
+  border:1px solid #35c5f0;
+  background-color:${props => props.forColor === true ? "#35c5f0" : "white"};
+  color:${props => props.forColor === true ? "white" : "#35c5f0"};
+  font-size:22px;
+  font-weight:700;
+  border-radius:4px;
+  margin-right:15px;
 
-const Review2 = (index) => {
-  const { detail : { productioninfo :{ production: { reviewUsers }} }} = useContext(ProductionContext)
+  &:last-child{
+    margin-right:0;
+  }
+
+  &:focus{
+    outline:none;
+  }
+`;
+const ButtonDiv = styled.div`
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:40px;
+`;
+
+
+const Review2 = () => {
+  const { detail : { productioninfo :{ production: { reviewUsers }}, loading}} = useContext(ProductionContext)
   const reviewUserArray = reviewUsers
-  
+  const howManyButton = Math.floor(reviewUserArray.length / 5) + 1
+  const repeatButton = reviewUserArray.filter((value, index) => {
+    if(index <= howManyButton){
+      return index
+    }else{
+      return
+    }
+  })
   // console.log(reviewUserArray);
 
   const sendGood = async(reviewId, good) => {
@@ -112,11 +146,25 @@ const Review2 = (index) => {
     }
   }
 
+  const [reviewPage, setReviewPage] = useState({
+    page:1,
+    pageSize:5
+  })
+
+  const test = true
+
+  const pageChange = (e) => {
+    const { target: {innerText}} = e;
+    const typeInnerText = +innerText
+    setReviewPage({...reviewPage, page:typeInnerText})
+  }
+  
   return (
     <>
       {reviewUserArray.map((value, index) => {
+        const checkPage = (Math.floor(index / reviewPage.pageSize) + 1) === reviewPage.page ? true : false;
         return (
-          <Container key={index}>
+          <Container key={index} forPage={checkPage}>
             <Div>
               <UserContainer>
                 <UserName>{value.nickname}</UserName>
@@ -142,8 +190,19 @@ const Review2 = (index) => {
               </Footer>
             </Div>
           </Container>
+          
         )
       })}
+      <ButtonDiv>
+        {repeatButton.map((value, index) => {
+          const color = reviewPage.page === (index + 1) ? true : false;
+          
+          return (
+            <Button key={index} onClick={pageChange} forColor={color}>{index + 1}</Button>
+          )
+          
+        })}
+      </ButtonDiv>
     </>
   )
 }
