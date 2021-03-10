@@ -268,7 +268,7 @@ const WriteQuestion = () => {
     const inValue = value
     setQuestion({...question, Text:inValue})
   }
-  console.log(question);
+  
 
   // setState가 될때마다 조건을 확인
   if(question.options && question.Text){
