@@ -47,6 +47,9 @@ export const userApi = {
     UserCartRemove: (id, removeArray) => api.delete(`cart/${id}`, {params: {
       removeArray
     }}),
-    UserWriteReview : (id) => api.post(``)
-}
+    UserWriteReview : (id) => api.post(``),
+    UserWriteQuestion: (user_question_id, production_question_id, option_question_id, type, option, secret, text) => api.post('production_question/', {
+      user_question_id, production_question_id, option_question_id, type, option, secret, text
+    })
+  }
 

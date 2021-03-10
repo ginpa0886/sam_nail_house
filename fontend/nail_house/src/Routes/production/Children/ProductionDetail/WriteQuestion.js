@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoon/style.css'
+import { userApi } from '../../../../api'
 
 const Container = styled.section`
   position:fixed;
@@ -14,7 +15,7 @@ const Container = styled.section`
   display:${props => props.bgDisplay === true ? "block" : "none"};
 `;
 
-const Box = styled.div`
+const Box = styled.form`
   background-color:white;
   width:624px;
   min-height: 687px;
@@ -84,7 +85,7 @@ const Type = styled.div`
   }
 `;
 
-const SelectButton = styled.button`
+const SelectButton = styled.div`
   color: #424242;
   background-color:white;
   width:100%;
@@ -95,6 +96,10 @@ const SelectButton = styled.button`
   border-radius:4px;
   position: relative;
   border:1px solid #dbdbdb;
+  padding-left:10px;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
   &:focus{
     outline:none;
     cursor: pointer;
@@ -162,7 +167,9 @@ const QuestionInput = styled.input`
   width:100%;
   padding:9px;
   min-height:110px;
-  text-align:top;
+  display:flex;
+  justify-content:flex-start;
+  align-items:flex-start;
 `;
 
 const Footer = styled.div`
@@ -208,19 +215,20 @@ const WriteQuestion = () => {
   const {detail, questionPage, questionPage:{ questionDisplay }, setQuestionPage} = useContext(ProductionContext)
   // option에는 option_id들이 담겨 있고, info에는 production_id가 담겨있기 때문에 따로 빼놓음.
   const {productioninfo:{option, production:{info}}} = detail
-
+  let allCheck = false;
+  const productionId = info.production_id;
+  const tableType = "구매"
   
   // question테이블에 담을 필수 데이터들 type, option, option_id, production_id, text, secret
   const [question, setQuestion] = useState({
     type:"상품",
-    option:"",
+    options:'',
     secret:false,
     seeSecret:false,
     Text:'',
     dropboxDisplay:false,
-    chooseOption:"선택해주세요"
+    chooseOption:'',
   })
-  console.log(question);
 
   // type State을 바구는 fnc
   const typeCheck = (e) => {
@@ -238,19 +246,96 @@ const WriteQuestion = () => {
     }
   }
 
+  // 비밀글에 대한 Fnc
   const changeSecret = () => {
     if(question.secret === false){
       setQuestion({...question, secret:true})
     }else{
       setQuestion({...question, secret:false})
     }
-    
   }
 
+  // 옵션 - 뭔가 오류가 나는 부분
+  const boxNameChange = (optionId, optionName) => {
+    const aoption = optionId;
+    const boption = optionName;
+    setQuestion({...question, options:aoption, chooseOption:boption, dropboxDisplay:false})
+  }
+
+  // input에 적는 것 업데이트하는 함수
+  const inputText = (e) => {
+    const {target:{value}} = e;
+    const inValue = value
+    setQuestion({...question, Text:inValue})
+  }
+  console.log(question);
+
+  // setState가 될때마다 조건을 확인
+  if(question.options && question.Text){
+    allCheck = true
+  }
+
+  // submit이 일어나면 발생하는 Fnc 문의 테이블에 필요한 데이터들(question State들을)을 전송함.
+  const submitQuestion = async(e) => {
+    e.preventDefault();
+    console.log(e);
+    if(allCheck){
+      const userId = localStorage.getItem("user_id")
+      if(!userId){
+        alert('로그인 후 이용해주세요!')
+        return
+      }else{
+        try{
+          await postQuestion(userId, productionId, question.options, tableType, question.type, question.secret, question.Text)
+          alert("문의가 등록되었습니다.")
+          setQuestionPage({...questionPage, questionDisplay:false})
+        }catch(e){
+
+        }
+        
+      }
+    }else{
+      alert('필수 항목들을 입력해주세요!')
+      return
+    }
+  }
+  console.log(question.options, question.Text);
+
+  // axios question post
+  const postQuestion = async(userId, productionId, questionoptions, tableType, questiontype, questionsecret, questionText) => {
+    const inUserId = userId;
+    const inProductionId = productionId;
+    const inQuestionOptions = questionoptions;
+    const inTableType = tableType;
+    const inQuestionType = questiontype;
+    const inQuestionSecret = questionsecret;
+    const inQuestionText = questionText;
+
+    try{
+      const res = await userApi.UserWriteQuestion(inUserId,
+        inProductionId,
+        inQuestionOptions,
+        inTableType,
+        inQuestionType,
+        inQuestionSecret,
+        inQuestionText)
+        if(!res){
+          console.log("요청에서 오류가 있는듯");
+          return
+        }else{
+          console.log(res);
+          return
+        }
+    }catch(e){
+      console.log("문의 작성 오류 발생!");
+      return
+    }
+  }
+  
 
   return (
     <Container bgDisplay={questionPage.questionDisplay}>
-      <Box>
+      <Box onSubmit={submitQuestion}>
         <Header>상품 문의하기
           <CloseIcon className="icon-Close" onClick={() => setQuestionPage({...questionPage, questionDisplay:false})}></CloseIcon>
         </Header>
@@ -271,12 +356,12 @@ const WriteQuestion = () => {
         </SubCon>
         <SubCon>
           <Sub>상품 및 옵션</Sub>
-          <SelectButton onClick={showDropBox}>{question.chooseOption}
+          <SelectButton onClick={showDropBox}>{question.chooseOption === "" ? "선택해주세요" : question.chooseOption}
             <SelectIcon className="icon-Chevron"></SelectIcon>
             <DropBox dropDisplay={question.dropboxDisplay}>
               {option && option.map((value, index) => {
                 return (
-                  <DropBoxWord key={index}>{index}.{value.option_name}</DropBoxWord>
+                  <DropBoxWord key={index} onClick={() => boxNameChange(value.option_id, value.option_name)}>{index}.{value.option_name}</DropBoxWord>
                 )
               })}
             </DropBox>
@@ -288,14 +373,14 @@ const WriteQuestion = () => {
         </SubCon>
         <SubCon>
           <Sub>문의 내용</Sub>
-          <QuestionInput placeholder="문의 내용을 입력하세요" />
+          <QuestionInput placeholder="문의 내용을 입력하세요" onChange={inputText}/>
           <SecretDiv forSecret={question.type === "상품" ? true : false} >
             <NoneButton bgColor={question.secret} onClick={changeSecret}></NoneButton>
             <NoneWord>비밀글로 문의하기</NoneWord>
           </SecretDiv>
         </SubCon>
         <Footer>문의 내용에 대한 답변은 '마이페이지 {'>'} 나의쇼핑 {'>'} 나의 문의내역'또는 '상품 상세페이지'에서 확인 가능합니다.</Footer>
-        <CompleteButton>완료</CompleteButton>
+        <CompleteButton type="submit">완료</CompleteButton>
       </Box>
     </Container>
   )
