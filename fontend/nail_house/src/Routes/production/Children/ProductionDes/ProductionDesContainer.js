@@ -40,7 +40,6 @@ const ProductionDesContainer = () => {
   const { production: { info : { name }} ,brand : { brand} } = information;
 
   return (
-    <>
       <InfoSection>
         <InfoBrand>{brand}</InfoBrand>
         <Name>{name}</Name>
@@ -50,7 +49,6 @@ const ProductionDesContainer = () => {
         <ProductionDes3 />
         <ProductionDes4 />
       </InfoSection>
-    </>
   )
 }
 

@@ -364,23 +364,6 @@ const Cart1 = ({ history }) => {
     setForBuy({...forBuy, count:pushArray})
   }
 
- 
-  const test = true
-
-  // const pageFnc = (index) => {
-  //   const tyepIndex = index
-
-  //   if(Math.floor(tyepIndex / page.pageSize) + 1 === page.page){
-  //     setPage({...page, canShow:[...page.canShow, typeIndex]})
-  //   }else{
-  //     const pushArray = page.canShow.filter(v => {
-  //       if(v === typeIndex){
-  //         return
-  //       }
-  //       return v
-  //     })
-  //   }
-  // }
   
 
   return (

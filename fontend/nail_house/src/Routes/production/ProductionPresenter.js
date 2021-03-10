@@ -69,7 +69,8 @@ const ProductionPresenter = () => {
   // console.log(categoryView);
   return (
     <> 
-      <Container className="container">
+      {!loading ? <Loader /> : 
+        <Container className="container">
         <Row className="row">
           <Col className="col-12">
             {loading === false ? <Loader /> : 
@@ -101,32 +102,32 @@ const ProductionPresenter = () => {
           </Col>
         </Row>
       </Container>
-        {loading === false  ? <Loader /> :
-          <>
-          <Container className="container">
-            <Row className="row">
-              <Col className="col-7">
-                <ProductionMainImg />
-              </Col>
-              <Col className="col-5">
-          
-                <ProductionDes />
-              </Col>
-            </Row>
-          </Container>
-              <ProductionGnb />
-          <Container className="container">
-            <Row className="row">
-              <Col className="col-8">
-                <ProductionDetail />
-              </Col>
-              <Test className="col-4">
-                <ProductionBar />
-              </Test>
-            </Row>
-          </Container>
-          </>
-        }
+      }
+      {loading === false  ? <Loader /> :
+        <>
+        <Container className="container">
+          <Row className="row">
+            <Col className="col-7">
+              <ProductionMainImg />
+            </Col>
+            <Col className="col-5">      
+              <ProductionDes />
+            </Col>
+          </Row>
+        </Container>
+            <ProductionGnb />
+        <Container className="container">
+          <Row className="row">
+            <Col className="col-8">
+              <ProductionDetail />
+            </Col>
+            <Test className="col-4">
+              <ProductionBar />
+            </Test>
+          </Row>
+        </Container>
+        </>
+      }
         
       
     </>

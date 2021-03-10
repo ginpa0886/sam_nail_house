@@ -52,9 +52,14 @@ const ProductionMainImageContainer = () => {
   const imgArray = img;
 
   const [border, setBorder] = useState({
-    mainImg:img[0].img_path,
-    number:0
+    mainImg:0,
+    number:0,
+    loading:false
   })
+
+  if(img && border.loading === false){
+    setBorder({...border, mainImg:img[0].img_path,loading:true})
+  }
   
   const changeState = (img, index) => {
     setBorder({...border, mainImg: img, number: index})

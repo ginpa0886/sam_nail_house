@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import { productionApi } from '../../api'
+import React, { useState } from 'react'
+
 
 export const ProductionContext = React.createContext()
 
@@ -11,31 +11,6 @@ const ProductionContextProvider = ({ children }) => {
     loading: false,
   })
 
-  
-
-  // 상품 세부정보 불러오는 함수
-  const getProductionInfo = async(id) => {
-    const typeId = +id
-    if(typeId){
-      try{
-        const {data: { productionDetail }} = await productionApi.ProductionInfo(typeId)
-        if(productionDetail){
-          
-          console.log(productionDetail);
-          setDetail({...detail, productioninfo: {...productionDetail}, loading:true})
-        }else{
-          return
-        }
-      } catch(e){
-        console.log(e);
-        return 
-      }
-
-    }else{
-      console.log("뭔가 문제가 있을 때");
-      return
-    }
-  }
 
   // 구매관련 State
   const [cart, setCart] = useState({
@@ -59,7 +34,7 @@ const ProductionContextProvider = ({ children }) => {
   
   
   return (
-    <ProductionContext.Provider value={{detail, setDetail, getProductionInfo, cart, setCart, test, setTest, questionPage, setQuestionPage}}>
+    <ProductionContext.Provider value={{detail, setDetail, cart, setCart, test, setTest, questionPage, setQuestionPage}}>
       {children}
     </ProductionContext.Provider>
   )

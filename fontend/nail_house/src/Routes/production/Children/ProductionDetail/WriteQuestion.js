@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProductionContext } from '../../context'
 import '../../../../Asset/icomoon/style.css'
@@ -71,7 +71,8 @@ const TypeDiv = styled.div`
 const Type = styled.div`
   width:100%;
   border:1px solid #dbdbdb;
-  background-color:white;
+  background-color:${props => props.forBg === true ? "#09addb" : "white"};
+  color:${props => props.forBg === true ? "white" : "black"};
   font-size:15px;
   line-height:40px;
   letter-spacing: -0.4px;
@@ -107,6 +108,31 @@ const SelectIcon = styled.div`
   right:20px;
 `;
 
+const DropBox = styled.div`
+  position:absolute;
+  top:45px;
+  left:0;
+  width:100%;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  background-color:white;
+  border:1px solid #dbdbdb;
+  padding:10px 0;
+  display:${props => props.dropDisplay === true ? "flex" : "none"};
+`;
+
+const DropBoxWord  = styled.div`
+  width:100%;
+  color: #424242;
+  padding:2px 10px;
+  font-size:14px;
+
+  &:hover{
+    background-color:#dbdbdb;
+  }
+`;
+
 const NoneSelectCon = styled.div`
   display:flex;
   justify-content:center;
@@ -116,7 +142,7 @@ const NoneButton = styled.button`
   width:22px;
   height:22px;
   border:solid 1px #dbdbdb;
-  background-color:white;
+  background-color:${props => props.bgColor === true ? "#09addb" : "white"};
   margin-right:10px;
   &:hover{
     cursor: pointer;
@@ -172,13 +198,55 @@ const CloseIcon = styled.div`
 
 const Div = styled.div``;
 
-const WriteQuestion = () => {
-  const {questionPage, questionPage:{ questionDisplay }, setQuestionPage} = useContext(ProductionContext)
+const SecretDiv = styled.div`
+  display:${props => props.forSecret === false ? "flex" : "none"};
+  justify-content:center;
+  align-items:center;
+`;
 
+const WriteQuestion = () => {
+  const {detail, questionPage, questionPage:{ questionDisplay }, setQuestionPage} = useContext(ProductionContext)
+  // option에는 option_id들이 담겨 있고, info에는 production_id가 담겨있기 때문에 따로 빼놓음.
+  const {productioninfo:{option, production:{info}}} = detail
+
+  
+  // question테이블에 담을 필수 데이터들 type, option, option_id, production_id, text, secret
+  const [question, setQuestion] = useState({
+    type:"상품",
+    option:"",
+    secret:false,
+    seeSecret:false,
+    Text:'',
+    dropboxDisplay:false,
+    chooseOption:"선택해주세요"
+  })
+  console.log(question);
+
+  // type State을 바구는 fnc
   const typeCheck = (e) => {
     const { target: { innerText }} = e;
-    console.log(innerText);
+    const typeInnerText = innerText;
+    setQuestion({...question, type:typeInnerText})
   }
+
+  // dropbox Display Fnc
+  const showDropBox = () => {
+    if(question.dropboxDisplay === false){
+      setQuestion({...question, dropboxDisplay:true})
+    }else{
+      setQuestion({...question, dropboxDisplay:false})
+    }
+  }
+
+  const changeSecret = () => {
+    if(question.secret === false){
+      setQuestion({...question, secret:true})
+    }else{
+      setQuestion({...question, secret:false})
+    }
+    
+  }
+
 
   return (
     <Container bgDisplay={questionPage.questionDisplay}>
@@ -190,21 +258,28 @@ const WriteQuestion = () => {
           <Sub>문의유형</Sub>
           <TypeCon>
             <TypeDiv>
-              <Type onClick={typeCheck}>상품</Type>
-              <Type>배송</Type>
-              <Type>반품</Type>
+              <Type onClick={typeCheck} forBg={question.type === "상품" ? true : false}>상품</Type>
+              <Type onClick={typeCheck} forBg={question.type === "배송" ? true : false}>배송</Type>
+              <Type onClick={typeCheck} forBg={question.type === "반품" ? true : false}>반품</Type>
             </TypeDiv>
             <TypeDiv>
-              <Type>교환</Type>
-              <Type>환불</Type>
-              <Type>기타</Type>
+              <Type onClick={typeCheck} forBg={question.type === "교환" ? true : false}>교환</Type>
+              <Type onClick={typeCheck} forBg={question.type === "환불" ? true : false}>환불</Type>
+              <Type onClick={typeCheck} forBg={question.type === "기타" ? true : false}>기타</Type>
             </TypeDiv>
           </TypeCon>
         </SubCon>
         <SubCon>
           <Sub>상품 및 옵션</Sub>
-          <SelectButton>선택해주세요
+          <SelectButton onClick={showDropBox}>{question.chooseOption}
             <SelectIcon className="icon-Chevron"></SelectIcon>
+            <DropBox dropDisplay={question.dropboxDisplay}>
+              {option && option.map((value, index) => {
+                return (
+                  <DropBoxWord key={index}>{index}.{value.option_name}</DropBoxWord>
+                )
+              })}
+            </DropBox>
           </SelectButton>
           <NoneSelectCon>
             <NoneButton></NoneButton>
@@ -214,8 +289,12 @@ const WriteQuestion = () => {
         <SubCon>
           <Sub>문의 내용</Sub>
           <QuestionInput placeholder="문의 내용을 입력하세요" />
+          <SecretDiv forSecret={question.type === "상품" ? true : false} >
+            <NoneButton bgColor={question.secret} onClick={changeSecret}></NoneButton>
+            <NoneWord>비밀글로 문의하기</NoneWord>
+          </SecretDiv>
         </SubCon>
-        <Footer>문의 내용에 대한 답변은 '마이페이지>나의쇼핑>나의 문의내역'또는 '상품 상세페이지'에서 확인 가능합니다.</Footer>
+        <Footer>문의 내용에 대한 답변은 '마이페이지 {'>'} 나의쇼핑 {'>'} 나의 문의내역'또는 '상품 상세페이지'에서 확인 가능합니다.</Footer>
         <CompleteButton>완료</CompleteButton>
       </Box>
     </Container>

@@ -3,11 +3,9 @@ import ProductionContextProvider from './context'
 
 const Production = () => {
   return(
-    <>
       <ProductionContextProvider>
         <ProductionContainer />
       </ProductionContextProvider> 
-    </>
   )
 }
 

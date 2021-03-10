@@ -2,6 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import Cart1 from './Cart1'
 import Cart2 from './Cart2'
+import Cart3 from './Cart3'
 import { CartContext } from './context'
 import { userApi } from '../../api'
 
@@ -30,6 +31,7 @@ const CartContainer = () => {
         <Row className="row">
           <Col className="col-8">
             <Cart1 />
+            <Cart3 />
           </Col>
           <Col className="col-4">
             <Cart2 />

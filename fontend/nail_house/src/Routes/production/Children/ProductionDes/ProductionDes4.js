@@ -17,7 +17,7 @@ const Div = styled.div`
 `;
 
 
-const OptionButton = styled.button`
+const OptionButton = styled.div`
   width:100%;
   height:40px;
   border: 1px solid rgba(61, 168, 245, 1);
@@ -38,7 +38,7 @@ const OptionButton = styled.button`
 `;
 
 
-const OptionAddButton = styled.button`
+const OptionAddButton = styled.div`
   width:100%;
   height:40px;
   border: 1px solid rgba(224, 226, 231, 1);
@@ -108,7 +108,7 @@ const OptionBarContainer = styled.section`
   z-index:100;
 `;
 
-const OptionItem = styled.button`
+const OptionItem = styled.div`
   width:100%;
   background-color:white;
   border:1px solid rgba(224, 226, 231, 1);;
@@ -177,13 +177,14 @@ const ProductionDes4 = () => {
   const originalPrice = original_price;
   const one = 1;
   const two = 2;
+  // console.log(optionArray);
   
   const [button, setButton] = useState({
     firstDisplay:false,
     secondDisplay:false
   })
 
-  const Click = (num) => {
+  const clickFnc = (num) => {
     if(num === 1){
       if(button.firstDisplay === false){
         setButton({...button, firstDisplay:true})
@@ -203,7 +204,6 @@ const ProductionDes4 = () => {
   // 질문 1 이벤트에서 눌리는 것 관련해서
   const AddProduction = (e) => {
     const { target : { children }} = e;
-    
     const name = children[0].innerText;
     const cost = children[1].children[1].innerText; 
 
@@ -239,7 +239,7 @@ const ProductionDes4 = () => {
     <>
       <Form>
         <Div>
-          <OptionButton onClick={() => Click(one)}>선택</OptionButton>
+          <OptionButton onClick={() => clickFnc(one)}>선택</OptionButton>
           <OptionBarContainer bgProps={button.firstDisplay}>
             {optionArray && optionArray.map((value, index) => {
               const sale = 100 - Math.floor((value.option_sell_price / originalPrice) * 100);
@@ -252,8 +252,8 @@ const ProductionDes4 = () => {
               const indexG = index + 7000;
               if(value.option_type === 0){
                 return (
-                  <ForKey key={indexG} onClick={AddProduction}>
-                    <OptionItem key={index}>
+                  <ForKey key={indexG}>
+                    <OptionItem key={index} onClick={AddProduction}>
                       <OptDiv key={indexA}>
                         <OptioName key={indexC}>{value.option_name}</OptioName>
                       </OptDiv>
@@ -271,7 +271,7 @@ const ProductionDes4 = () => {
           </OptionBarContainer>
         </Div>
         <Div>
-          <OptionAddButton onClick={() => Click(two)}>추가상품 (선택)</OptionAddButton> 
+          <OptionAddButton onClick={() => clickFnc(two)}>추가상품 (선택)</OptionAddButton> 
           <OptionBarContainer bgProps={button.secondDisplay}>
             {optionArray && optionArray.map((value, index) => {
               const sale = 100 - Math.floor((value.option_sell_price / originalPrice) * 100);

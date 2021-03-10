@@ -13,7 +13,7 @@ const ButtonSection = styled.div`
   margin-bottom:40px;
 `;
 
-const CartButton = styled.button`
+const CartButton = styled.div`
   width:100%;
   height:55px;
   background-color:white;
@@ -25,13 +25,14 @@ const CartButton = styled.button`
   letter-spacing:-0.02em;
   font-weight:700;
   margin-right:8px;
+  padding:13px 73px;
 
   &:hover{
     cursor: pointer;
   }
 `;
 
-const OrderButton = styled.button`
+const OrderButton = styled.div`
   width:100%;
   height:55px;
   border:none;
@@ -42,6 +43,7 @@ const OrderButton = styled.button`
   line-height:1.555555555555556;
   letter-spacing:-0.02em;
   font-weight:700;
+  padding:13px 73px;
 
   &:hover{
     cursor: pointer;
@@ -110,7 +112,7 @@ const GoCart = styled.button`
   }
 `;
 
-const Okay = styled.button`
+const Okay = styled.div`
   width:100%;
   height:55px;
   color:rgba(0, 0, 0, 1);
@@ -122,6 +124,7 @@ const Okay = styled.button`
   border:none;
   border-radius:4px;
   text-align:center;
+  padding:13px 78px;
 
   &:hover{
     cursor: pointer;

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import '../Asset/icomoon/style.css'
 import { HeaderContext } from './context'
+import { userApi } from '../api'
 
 const ItemContainer = styled.div`
   width:32px;
@@ -119,8 +120,9 @@ const UserCanDo = styled.div`
   }
 `;
 
+
 const UserPlace = () => {
-  const { afterLogin, afterLogin:{ loading }, setAfterLogin, ChecktheLogined } = useContext(HeaderContext)
+  const { afterLogin, afterLogin:{ loading }, setAfterLogin, ChecktheLogined, userInfo, userInfo:{infoLoading, cart} ,setUserInfo } = useContext(HeaderContext)
   let isLogin = false;
   const id = localStorage.getItem("user_id")
   const token = localStorage.getItem("token")
@@ -130,7 +132,7 @@ const UserPlace = () => {
   // localStorage.removeItem("token")
   // 토큰 유효성 검증 하는 곳
   if(token !== null){
-    ChecktheLogined(id);
+    // ChecktheLogined(id);
     isLogin = true;
   }
 
@@ -151,6 +153,37 @@ const UserPlace = () => {
       setUserDo({...userDo, nowDisplay: "false"})
     }
   }
+
+  // 해당 유저의 카트정보를 불러오는 함수
+  const cartInfo = async(id) => {
+    const typeId = +id
+    try{
+      const res = await userApi.UserCart(typeId)
+      const { data : {UserCartInfo: {info}}} = res
+      setUserInfo({...userInfo, cart:info, infoLoading:true})
+    }catch(e){
+      console.log("카트정보 불러오기 오류 발생");
+    }
+  }
+
+  // 로그인이 확인되어 있는 상태에서 아직 유저관련 데이터(카트, 소식등이)가 State에 담기지 않았을 때
+  if(isLogin && infoLoading === false){
+    cartInfo(id)
+  }
+
+  const logOut = (e) => {
+    const { target: { innerText }} = e
+
+    if(innerText === "로그아웃"){
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("token");
+      localStorage.removeItem("profile");
+      window.location.replace('/')
+      return
+    }
+    return
+  }
+  
 
   return(
     <>
@@ -177,9 +210,11 @@ const UserPlace = () => {
             </UserItem>
           </ItemContainer>
           <ItemContainer>
-            <UserItem className="icon-Cart">
-              <News>1</News>
-            </UserItem>
+            <SLink to="/mycart">
+              <UserItem className="icon-Cart">
+                {userInfo.cart.length === 0 ? "" : <News>{userInfo.cart.length}</News>}
+              </UserItem>
+            </SLink>
           </ItemContainer>
           <UserIcon 
             bgUser={profile ? profile : require("../Asset/userIcon/userIcon.jpg").default} 
@@ -191,7 +226,7 @@ const UserPlace = () => {
               <UserCanDoContainer>
                 {userDo && userDo.do.map((value, index) => {
                   return (
-                    <UserCanDo 
+                    <UserCanDo onClick={logOut}
                       key={index}>{value}
                     </UserCanDo>
                   )

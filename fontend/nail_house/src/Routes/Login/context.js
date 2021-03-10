@@ -61,6 +61,7 @@ const LoginContextProvieder = ({children}) => {
         localStorage.setItem("token", token)
         localStorage.setItem("user_id", user_id)
         localStorage.setItem("profile", profile)
+        window.location.replace('/')
         return
       }else{
         console.log("token 정보가 올바르지 않습니다.");

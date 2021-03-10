@@ -192,7 +192,7 @@ const LoginPresenter = (props) => {
     }
 
     if(checkLogin === true){
-      props.history.push("/")
+      
       postUserLogin(userEmail, userPw)
     }
   }

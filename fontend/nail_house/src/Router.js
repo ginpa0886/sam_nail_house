@@ -1,5 +1,5 @@
 import React from "react"
-import { HashRouter as Routers, Route, Redirect, Switch } from "react-router-dom"
+import { BrowserRouter as Routers, Route, Redirect, Switch } from "react-router-dom"
 import Header from "./Header"
 import Home from './Routes/Home'
 import Production from "./Routes/production"
@@ -16,22 +16,21 @@ const Router = () => {
   return (
     <>
     <Routers>
-      <>
         <Header />
         <Route path="*" component={CheckMiddleware} />
         <Switch>
           <Route path="/" exact component={Home}/>
-          <Route path="/community" exact component={Community} replace />
+          <Route path="/community" exact component={Community} />
           <Route path="/store" exact component={Store} />
           <Route path="/interior" exact component={Interior} />
-          <Route path="/production/:id" exact component={Production} /> 
+          <Route path="/production/:id"  component={Production} /> 
           <Route path="/login" exact component={Login} />
           <Route path="/signin" exact component={Signin} />
           <Route path="/test" exact component={Test} />
-          <Route path="/mycart" exact component={Cart} />
+          
         </Switch>
-      </>
       <Redirect from="*" to="/" />
+        <Route path="/mycart" exact component={Cart} />
     </Routers>
     </>
   )

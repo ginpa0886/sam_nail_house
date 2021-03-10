@@ -40,16 +40,21 @@ const HeaderContextProvider = ({ children }) => {
   })
 
   // 토큰 유효성 검사하는 곳
-  const ChecktheLogined = async(id) => {
+  const ChecktheLogined = async() => {
     console.log("로그인 확인 실행됨");
     try{
       const token = localStorage.getItem("token")
+      const id = localStorage.getItem("user_id")
       const res = await userApi.UserCheck(id, token);
       // console.log(`res = ${res}`);
       if(res){
         // console.log("check");
         return
       }else{
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("token");
+        localStorage.removeItem("profile");
+        setAfterLogin({...afterLogin, loading:"false"})
         return 
       }
     }catch(e){
@@ -60,14 +65,18 @@ const HeaderContextProvider = ({ children }) => {
       // console.log("유저 정보가 만료되었습니다.");
       return 
     }
-
   }
     
-  
+  const [userInfo, setUserInfo] = useState({
+    notice:[],
+    alarm:[],
+    cart:[],
+    infoLoading:false
+  })
 
 
   return (
-  <HeaderContext.Provider value={{click, setClick, write, changeDisplay, currentlySearch, setCurrentlySearch, afterLogin, setAfterLogin, ChecktheLogined}}>
+  <HeaderContext.Provider value={{click, setClick, write, changeDisplay, currentlySearch, setCurrentlySearch, afterLogin, setAfterLogin, ChecktheLogined, userInfo, setUserInfo}}>
     {children}
   </HeaderContext.Provider>
   );
