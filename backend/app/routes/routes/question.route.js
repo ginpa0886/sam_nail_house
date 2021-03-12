@@ -99,8 +99,10 @@ router.get('/:id', async(req, res) => {
 
 // 문의 등록 API
 router.post('/', async(req, res) => {
-  const { user_question_id, production_question_id, option_question_id, type, option, secret, text, answer, answer_text } = req.body
+  const { user_question_id, production_question_id, option_question_id, type, option, secret, text } = req.body
 
+  console.log("문의 post 요청이 옴");
+  
   if(!user_question_id || isNaN(user_question_id)){
     res.status.json({message: "user_question_id 값이 올바르지 않습니다."})
   }
@@ -122,15 +124,9 @@ router.post('/', async(req, res) => {
   if(!text){
     res.status.json({message: "text 값이 올바르지 않습니다."})
   }
-  if(!answer){
-    res.status.json({message: "answer 값이 올바르지 않습니다."})
-  }
-  if(!answer_text){
-    res.status.json({message: "answer_text 값이 올바르지 않습니다."})
-  }
 
   const questionData = {
-    user_question_id, production_question_id, option_question_id, type, option, secret, text, answer, answer_text
+    user_question_id, production_question_id, option_question_id, type, option, secret, text
   }
 
   try{

@@ -5,6 +5,7 @@ const router = require('../routes/production.route');
 
 
 router.use('/', (req, res, next) => {
+  console.log('실행됨');
   jwt.sign({}, secretKey.secret, { expiresIn: '5m'})
 })
 

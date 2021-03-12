@@ -152,9 +152,19 @@ const ReviewByProductionId = (id) => {
 
 const reviewUser = (id) => {
   return db(User)
-      .select("nickname", "profile", "email", "user_id", 'picture', 'text', 'rating', "good")
+      .select("review_id","nickname", "profile", "email", "user_id", 'picture', 'text', 'rating', "good")
       .innerJoin(Review, "user_re_id", "user_id")
       .where('production_re_id', id)
+}
+
+const controllGood = (id, good) => {
+  const typeId = +id;
+  const typeGood = +good;
+
+  console.log("service문 진입");
+  return db(Review)
+      .where('review_id', typeId)
+      .update('good', typeGood)
 }
 
 const QuestionByProductionId = (id) => {
@@ -212,7 +222,7 @@ const reviewList = (page, pageSize) => {
 const reviewFindById = (id) => {
   const typeId = +id;
   return db(Review)
-      .select('*')
+      .select('*', `${Review}.review_id`)
       .where('review_id', typeId)
       .then(([item]) => item)
 }
@@ -317,7 +327,7 @@ const orderCreate = (cartDetail) => {
 
 // 장바구니 List 조회
 
-const cartList = (page, pageSize) => {
+const cartList = (page, pageSize, id) => {
   if(isNaN(page)){
     return Promise.reject('page의 값이 숫자가 아닙니다.')
   }
@@ -329,6 +339,7 @@ const cartList = (page, pageSize) => {
       .select('*')
       .limit(pageSize)
       .offset((page - 1) * pageSize)
+      .andWhere('user_cart_id', id)
 }
 
 // 장바구니 상세 조회
@@ -336,12 +347,30 @@ const cartFindById = (id) => {
   const typeId = +id
 
   return db(Cart)
-      .select("*")
+      .select("*", `${Cart}.enabled`)
       .innerJoin(Production, "production_id", "production_cart_id")
       .innerJoin(Option, "option_cart_id", "option_id")
       .innerJoin(Brand, "brand_id", "production_cart_id")
+      .innerJoin(ProductionImg, "image_id", "production_cart_id")
       .where('user_cart_id', typeId)
-      
+      .andWhere(`${Cart}.enabled`, 1)
+}
+
+const cartDelete = (removeArray) => {
+  const typeArray = removeArray.map(v => Number(v))
+  
+  // typeArray.map((value) => {
+  //   return (  
+  //     db(Cart)
+  //     .where('cart_id', value)
+  //     .update('enabled', 0)
+  //   )  
+    
+  // })
+  return db(Cart)
+      .whereIn('cart_id', typeArray)
+      .update('enabled', 0)
+  
 }
 
 // 장바구니 total 가격 확인
@@ -429,6 +458,7 @@ module.exports = {
   productionPost,
   reviewList,
   reviewFindById,
+  controllGood,
   findStarById,
   reviewCreate,
   questionList,
@@ -445,5 +475,6 @@ module.exports = {
   cartCreate,
   starCount,
   findDeliveryInfo,
-  testInnerjoin
+  testInnerjoin,
+  cartDelete
 }
