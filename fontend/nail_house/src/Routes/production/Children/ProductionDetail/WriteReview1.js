@@ -178,12 +178,15 @@ const CheckBody = styled.div`
 const CheckButton = styled.button`
   width:22px;
   height:22px;
-  background-color:white;
+  background-color:${props => props.Bgcondition === true ? "#35c5f0" : "white"};
   border-radius:4px;
   border:1px solid #35c5f0;
 
   &:hover{
     cursor: pointer;
+  }
+  &:focus{
+    outline:none;
   }
 `;
 const CheckWord = styled.div`
@@ -232,6 +235,9 @@ const CloseIcon = styled.div`
     cursor: pointer;
   }
 `
+
+const UserImg = styled.img``;
+
  
 
 const WriteReview1 = () => {
@@ -243,6 +249,14 @@ const WriteReview1 = () => {
   const ProductImg = productionInfo.production.img[0].img_path;
 
   const starOnDisplay = test.reviewDisplay;
+
+  const [writeReview, setWriteReview] = useState({
+    star:'',
+    file:'',
+    fileUpload:false,
+    content:'',
+    condition:false
+  })
   
   const whenSubmit = (e) => {
     e.preventDefault();
@@ -254,9 +268,49 @@ const WriteReview1 = () => {
     // }
     console.log(e);
   }
-  const DDD = (e) => {
-    console.log(e);
+  const DDD = async(e) => {
+    console.log( writeReview.file);
+    const formData = new FormData();
+      formData.append( "img", writeReview.file);
+      
+      console.log(`fromData는 ${formData}`);
+      try{
+        const res = await productionApi.WriteReview(formData)
+        if(!res){
+          console.log(res);
+        }else{
+          console.log("리뷰작성에 문제가 발생했습니다.");
+        }
+      }catch(e){
+        console.log(e);
+      }
   }
+
+  // 사진이 업로드시 setState하는곳?
+  const fileCheck = (e) => {
+    const {target:{files}} = e;
+    const typeFile = files[0];
+    console.log(e);
+    console.log(typeFile.path);
+    setWriteReview({...writeReview, file:typeFile})
+  }
+
+  // input값 변경시 State에 저장 시키는 onchange함수
+  const writeContent = (e) => {
+    const {target:{value}} = e;
+    const typeValue = value;
+    setWriteReview({...writeReview, content:typeValue})
+  }
+
+  // 상품 구매 확인 컨디션 체크
+  const changeCondition = () => {
+    if(writeReview.condition === false){
+      setWriteReview({...writeReview, condition:true});
+    }else{
+      setWriteReview({...writeReview, condition:false});
+    }
+  }
+  
   
   return (
     <>
@@ -297,18 +351,29 @@ const WriteReview1 = () => {
               </Body>
             </CommonContainer>
             <CommonContainer>
+              {writeReview.fileUpload === false ? <></> : <UserImg src=""></UserImg>}
               <CommonHeader>사진 첨부(선택)</CommonHeader>
               <PhotoSub>사진을 첨부해주세요. (최대 1장)</PhotoSub>
-              <PhotoInput type="file" name="image"  />
+              <PhotoInput 
+                type="file" 
+                name="image" 
+                onChange={fileCheck} />
             </CommonContainer>
             <CommonContainer>
+              <UserImg></UserImg>
               <CommonHeader>리뷰 작성</CommonHeader>
-              <ReviewInput placeholder="자세하고 솔직한 리뷰는 다른 고객에게 큰 도움이 됩니다. (최소 20자이상)" type="text" name="title" />
+              <ReviewInput 
+                placeholder="자세하고 솔직한 리뷰는 다른 고객에게 큰 도움이 됩니다. (최소 20자이상)" 
+                type="text" 
+                name="title"
+                onChange={writeContent}
+                accept="image/git, image/jpeg, image/png"
+                />
             </CommonContainer>
             <CommonContainer>
               <CommonHeader>상품을 직접 사용하고 작성한 리뷰인가요?</CommonHeader>
               <CheckBody>
-                <CheckButton></CheckButton>
+                <CheckButton onClick={changeCondition} Bgcondition={writeReview.condition}></CheckButton>
                 <CheckWord>네, 상품을 직접 사용한 후 작성한 리뷰이며, 오늘의집 리뷰 정책에 동의합니다.</CheckWord>
               </CheckBody>
             </CommonContainer>
