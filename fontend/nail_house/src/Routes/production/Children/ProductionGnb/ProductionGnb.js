@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import {ProductionContext} from '../../context'
 
 const ForSticky = styled.div`
   width:100%;
@@ -52,7 +53,11 @@ const Count = styled.span`
 `;
 
 const ProductionGnb = () => {
-  
+  const {detail:{productioninfo}} = useContext(ProductionContext)
+  const typeproduct = productioninfo;
+  const {question,review} = typeproduct.production;
+  const questionCount = question.length;
+  const reviewCount = review.length;
   return (
     <ForSticky>
       <Container>
@@ -61,11 +66,11 @@ const ProductionGnb = () => {
         </ItemContainer>
         <ItemContainer>
           <Detail>리뷰</Detail>
-          <Count>566</Count>
+          <Count>{reviewCount}</Count>
         </ItemContainer>
         <ItemContainer>
           <Detail>문의</Detail>
-          <Count>96</Count>
+          <Count>{questionCount}</Count>
         </ItemContainer>
         <ItemContainer>
           <Detail>배송/문의</Detail>
