@@ -132,7 +132,7 @@ const ProductionDes4_1 = () => {
                             )}
                           </CountDropboxContainer>
                         </TotalCount>
-                        <TotalPrice>{totalPrice}원</TotalPrice>
+                        <TotalPrice>{(+totalPrice).toLocaleString()}원</TotalPrice>
                       </TotalTwo>
                     </TotalContainer>
                   </ForKey>

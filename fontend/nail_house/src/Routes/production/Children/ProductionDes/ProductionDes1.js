@@ -111,11 +111,11 @@ const ProductionDes1 = () => {
         </Per>
         <SellNum>
           <Div>
-            <Original>{original}</Original>
+            <Original>{(+original).toLocaleString()}</Original>
             <OriginalWon>원</OriginalWon>
           </Div>
           <Div>
-            <SellPrice>{sellPrice}</SellPrice>
+            <SellPrice>{(+sellPrice).toLocaleString()}</SellPrice>
             <SellPriceWon>원</SellPriceWon>
           </Div>
         </SellNum>

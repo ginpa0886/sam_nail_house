@@ -207,8 +207,12 @@ const ProductionDes4 = () => {
     const name = children[0].innerText;
     const cost = children[1].children[1].innerText; 
 
+    // string형태의 자릿수에 (,)콤마가 찍혀있는 것들 제거해주는 replace함수
+    const typecost = cost.replace(",", "");
+    
     // State에 total 금액 계산
-    const total = totalmoney + (+cost);
+    // typecost가 string이므로 이를 Number로 바꿔주기의해 +typecost로 작성
+    const total = totalmoney + (+typecost);
     
     // option_id 와 production_id를 담기게 하는 것
     const chckoptionId = [];
@@ -220,7 +224,7 @@ const ProductionDes4 = () => {
     })
   
      if(!production.includes(name)){
-      setCart({...cart, production:[...production, name], price:[...price, cost], count:[...count, 1], productionId:[...productionId, chckoptionId[1]], optionId:[...optionId, chckoptionId[0]], totalmoney:total, loading:true})
+      setCart({...cart, production:[...production, name], price:[...price, typecost], count:[...count, 1], productionId:[...productionId, chckoptionId[1]], optionId:[...optionId, chckoptionId[0]], totalmoney:total, loading:true})
      }else{
        alert("이미 담겨진 상품입니다.")
      }
@@ -259,7 +263,7 @@ const ProductionDes4 = () => {
                       </OptDiv>
                       <OptDivTwo key={indexB}>
                         <OptionSale key={indexD}>{sale}%</OptionSale>
-                        <OptionPrice key={indexE}>{value.option_sell_price}</OptionPrice>
+                        <OptionPrice key={indexE}>{(+value.option_sell_price).toLocaleString()}</OptionPrice>
                         <OptionSpecial key={indexF}>특가</OptionSpecial>
                       </OptDivTwo>
                     </OptionItem>
@@ -306,7 +310,7 @@ const ProductionDes4 = () => {
         <CostSection>
           <Span>주문금액</Span>
           <CostContainer>
-            <Cost>{totalmoney}</Cost>
+            <Cost>{(+totalmoney).toLocaleString()}</Cost>
             <Won>원</Won>
           </CostContainer>
         </CostSection>

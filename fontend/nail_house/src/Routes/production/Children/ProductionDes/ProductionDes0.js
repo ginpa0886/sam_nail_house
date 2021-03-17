@@ -39,7 +39,7 @@ const StarAbove = styled.div`
 
 const ProductionDes0 = () => {
   const {detail: { productioninfo }} = useContext(ProductionContext)
-  console.log(productioninfo);
+  // console.log(productioninfo);
   let totalRating = 0;
 
   // 별점 체크기
