@@ -419,7 +419,7 @@ const Cart1 = ({ history }) => {
                           <Number onClick={numFnc}>9</Number>
                         </Dropbox>
                       </TwoCount>
-                      <SmallTotal>{numAndprice}원</SmallTotal>
+                      <SmallTotal>{(+numAndprice).toLocaleString()}원</SmallTotal>
                     </TwoCon>
                   </BodyTwo>
                   <BodySam>
@@ -428,7 +428,7 @@ const Cart1 = ({ history }) => {
                       <Option>|</Option>
                       <Option>바로구매</Option>
                     </SamCon>
-                    <Total>{numAndprice}원</Total>
+                    <Total>{(+numAndprice).toLocaleString()}원</Total>
                   </BodySam>
                 </Body>
                 <Footer>

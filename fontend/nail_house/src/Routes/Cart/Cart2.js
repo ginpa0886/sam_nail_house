@@ -110,19 +110,19 @@ const Cart2 = () => {
         <Header>
           <PriceCon>
             <Word>총 상품금액</Word>
-            <Price>{totalOriginal}원</Price>
+            <Price>{(+totalOriginal).toLocaleString()}원</Price>
           </PriceCon>
           <PriceCon>
             <Word>총 배송비</Word>
-            <Price>+{deliveryFee}원</Price>
+            <Price>+{(+deliveryFee).toLocaleString()}원</Price>
           </PriceCon>
           <PriceCon>
             <Word>총 할인금액</Word>
-            <Price>{salePrice}원</Price>
+            <Price>{(+salePrice).toLocaleString()}원</Price>
           </PriceCon>
           <Total>
             <TotalWord>결제금액</TotalWord>
-            <TotalPrice>{totalPrice + deliveryFee}원</TotalPrice>
+            <TotalPrice>{(totalPrice + deliveryFee).toLocaleString()}원</TotalPrice>
           </Total>
         </Header>
         <ButtonSection>
