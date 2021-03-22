@@ -204,6 +204,7 @@ const ProductionBar0 = () => {
   })
   const typeTotalmoney = totalmoney
 
+  // dropbox active관리
   const dropboxFns = (index) => {
     const arrayNum = +index;
     const typeArray = dropboxCheckArray.array;
@@ -224,8 +225,26 @@ const ProductionBar0 = () => {
     
     setdropboxCheckArray({...dropboxCheckArray, array:resultArray})
   }
-  console.log(dropboxCheckArray);
   
+  // dropbox에서 숫자 선택시 상품 선택 갯수 변와 및 총 가격 업데이트 하는 함수
+  const changeCount = (e) => {
+    
+    const {target:{innerText, id}} = e;
+    const typeText = +innerText;
+    const typeId = id;
+    const cartCountArray = cart.count;
+    cartCountArray[typeId] = typeText;
+
+    // 총 구입액 구하는 곳
+    const typeTotal = {
+      total:0
+    }
+    cartContainer.price.map((value, index) => typeTotal.total += value * cartContainer.count[index]);
+    
+
+    setCart({...cart, count:cartCountArray, totalmoney:typeTotal.total});
+  }
+
   return (
     <>
       <Container>
@@ -246,15 +265,15 @@ const ProductionBar0 = () => {
                 <LowDropboxCon>
                   <LowDropboxContent onClick={() => dropboxFns(index)}>{cartContainer.count[index]}
                     <DropboxCon bgDropbox={bgCheckdropBox}>
-                      <DropboxContent>1</DropboxContent>
-                      <DropboxContent>2</DropboxContent>
-                      <DropboxContent>3</DropboxContent>
-                      <DropboxContent>4</DropboxContent>
-                      <DropboxContent>5</DropboxContent>
-                      <DropboxContent>6</DropboxContent>
-                      <DropboxContent>7</DropboxContent>
-                      <DropboxContent>8</DropboxContent>
-                      <DropboxContent>9</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>1</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>2</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>3</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>4</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>5</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>6</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>7</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>8</DropboxContent>
+                      <DropboxContent onClick={changeCount} id={index}>9</DropboxContent>
                     </DropboxCon>
                   </LowDropboxContent>
                   <LowDropboxIcon className="icon-Chevron"></LowDropboxIcon>
